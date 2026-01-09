@@ -1,0 +1,110 @@
+/* ISKCON Traditional Vedic Scripture Styling */
+.vedic-article {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 1.375rem;
+    line-height: 2.1;
+    color: #5c4b3a;
+    max-width: 56rem;
+    margin: 0 auto;
+}
+
+.vedic-article p {
+    margin-bottom: 1.75rem;
+    text-align: left;
+}
+
+/* Sanskrit Verses - Transliteration */
+.vedic-article em,
+.vedic-article i {
+    font-style: italic;
+    color: #92400e;
+}
+
+/* Bold emphasis for author names */
+.vedic-article strong,
+.vedic-article b {
+    font-weight: 600;
+    color: #78350f;
+}
+
+/* Blockquotes for Sanskrit verses */
+.vedic-article blockquote {
+    border-left: 4px solid #d97706;
+    background: linear-gradient(to right, #fef3c7, transparent);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #92400e;
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.vedic-article blockquote p {
+    margin-bottom: 0.5rem;
+}
+
+.vedic-article blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Headings */
+.vedic-article h1,
+.vedic-article h2,
+.vedic-article h3,
+.vedic-article h4 {
+    font-family: 'Georgia', serif;
+    color: #78350f;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.vedic-article h2 {
+    font-size: 1.875rem;
+    border-bottom: 2px solid #fcd34d;
+    padding-bottom: 0.5rem;
+}
+
+.vedic-article h3 {
+    font-size: 1.625rem;
+}
+
+/* Images - centered */
+.vedic-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5rem auto;
+    display: block;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Links */
+.vedic-article a {
+    color: #b45309;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.vedic-article a:hover {
+    color: #92400e;
+}
+
+/* Lists */
+.vedic-article ul,
+.vedic-article ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.vedic-article li {
+    margin-bottom: 0.75rem;
+}
+
+/* Article content wrapper */
+.vedic-article .article-content {
+    padding: 0;
+}
+
+/* TTS wrapper (from scraped content) */
+.vedic-article .tts_content_wrapper_2 {
+    padding: 0;
+}

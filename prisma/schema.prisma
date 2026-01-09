@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  name       String
+  avatar     String?
+  provider   String   // 'google', 'github', 'email'
+  externalId String   // ID from the provider
+  createdAt  DateTime @default(now())
+  lastLogin  DateTime @default(now())
+
+  // NextAuth fields
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Donor {
+  id            String   @id @default(cuid())
+  donationFor   String   // Type of donation
+  amount        String   // Donation amount
+  mobileNumber  String
+  email         String
+  name          String
+  pan           String?  // Optional PAN number
+  address       String?  // Optional address
+  pinCode       String?  // Optional PIN code
+  isMemorial    Boolean  @default(false)
+  message       String?  // Message/Prayer/Remarks
+  paymentMethod String   // 'razorpay'
+  paymentId     String?  // Razorpay payment ID
+  orderId       String?  // Razorpay order ID
+  status        String   @default("pending") // pending, completed, failed
+  createdAt     DateTime @default(now())
+}
+
+model CartOrder {
+  id             String   @id @default(cuid())
+  userId         String?
+  userEmail      String
+  items          String   // JSON string of cart items
+  totalPrice     Float
+  firstName      String
+  lastName       String
+  companyName    String?
+  country        String
+  streetAddress  String
+  apartment      String?
+  city           String
+  state          String
+  postcode       String
+  phone          String
+  paymentId      String?
+  orderId        String?
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
+}

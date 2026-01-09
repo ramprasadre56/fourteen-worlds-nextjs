@@ -1,0 +1,196 @@
+[
+  {
+    "issue": "December 2025",
+    "cover_image": "/btg_magazine_images/december_2025/C2.png",
+    "articles": [
+      {
+        "id": "dec_2025_1",
+        "title": "Try To Understand Kṛṣṇa",
+        "author": "His Divine Grace A. C. Bhaktivedanta Swami Prabhupada",
+        "reading_time": "7 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/Krishna-4.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/try-to-understand-krishna.html",
+        "description": "To truly benefit, we have to go beyond a superficial view of Krishna and learn how great He really is.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/try-to-understand-krishna/"
+      },
+      {
+        "id": "dec_2025_2",
+        "title": "Our BFF is Waiting",
+        "author": "Aarushi Agrawal",
+        "reading_time": "5 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/Krishna-Ambrace-rotated.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/our-bff-is-waiting.html",
+        "description": "The real proof that God loves us lies in our own perspective.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/our-bff-is-waiting/"
+      },
+      {
+        "id": "dec_2025_3",
+        "title": "When Bhakti Becomes a Drug",
+        "author": "Vraja Bihari Dasa",
+        "reading_time": "6 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/Comfort.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/when-bhakti-becomes-a-drug.html",
+        "description": "The Silent Deviation: How seeking comfort can subtly replace true surrender in spiritual practice",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/when-bhakti-becomes-a-drug/"
+      },
+      {
+        "id": "dec_2025_4",
+        "title": "The Eternal Call of Kurukṣetra",
+        "author": "Charu Bali",
+        "reading_time": "7 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/Krishna1-1.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-eternal-call-of-kurukshetra.html",
+        "description": "When God Spoke — and Still Speaks",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-eternal-call-of-kurukshetra/"
+      },
+      {
+        "id": "dec_2025_5",
+        "title": "Prabhupada's Prayers",
+        "author": "Chaitanya",
+        "reading_time": "5 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/SP-3.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/prabhupadas-prayers.html",
+        "description": "Devotional insights into the song that Srila Prabhupada wrote while traveling aboard the Jaluduta on his way to America",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/prabhupadas-prayers/"
+      },
+      {
+        "id": "dec_2025_6",
+        "title": "2025 A Year Eight Perspectives on 365 Days",
+        "author": "BTG Editorial Team",
+        "reading_time": "8 mins",
+        "date": "December 2025",
+        "image": "/btg_magazine_images/december_2025/Editorial-4.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/2025-a-year-eight-perspectives-on-365-days.html",
+        "description": "Astronomical Perspective: If I would have asked an astronomer as to what happened from 1st January till 31st December 2025...",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/2025-a-year-eight-perspectives-on-365-days/"
+      }
+    ]
+  },
+  {
+    "issue": "November 2025",
+    "cover_image": "/btg_magazine_images/C1.jpg",
+    "articles": [
+      {
+        "id": "article_1",
+        "title": "The Technique For Universal Love",
+        "author": "His Divine Grace A. C. Bhaktivedanta Swami Prabhupada",
+        "reading_time": "5 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/Mrigari-SPlec.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-technique-for-universal-love.html",
+        "description": "We can love everyone and everything only when we love God and know Him as He is.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-technique-for-universal-love/"
+      },
+      {
+        "id": "article_2",
+        "title": "How Gita Wisdom Helped Me Transcend Polio",
+        "author": "Radhika Raman Dasa",
+        "reading_time": "12 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/boy-with-crutches.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/how-gita-wisdom-helped-me-transcend-polio.html",
+        "description": "A devotee shares his journey of overcoming physical challenges through spiritual strength.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/how-gita-wisdom-helped-me-transcend-polio/"
+      },
+      {
+        "id": "article_3",
+        "title": "The Forgotten Are Awakening",
+        "author": "Charu Bali",
+        "reading_time": "7 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/5-1.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-forgotten-are-awakening.html",
+        "description": "Tribal Devotees Lead a Spiritual Renaissance from Mayapur",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-forgotten-are-awakening/"
+      },
+      {
+        "id": "article_4",
+        "title": "From Bollywood to Bhagavad-gita",
+        "author": "Vraja Bihari Dasa",
+        "reading_time": "9 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/BG.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/from-bollywood-to-bhagavad-gita.html",
+        "description": "Choosing Krishna in the browser of the mind",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/from-bollywood-to-bhagavad-gita/"
+      },
+      {
+        "id": "article_5",
+        "title": "Ed Sheeran's soul is longing for Krishna",
+        "author": "Aarushi Agrawal",
+        "reading_time": "4 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/EdxKC.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/ed-sheerans-soul-is-longing-for-krishna.html",
+        "description": "English singer songwriter Ed Sheeran's latest track Sapphire, featuring Arijit Singh, has exploded among Indian listeners.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/ed-sheerans-soul-is-longing-for-krishna/"
+      },
+      {
+        "id": "article_6",
+        "title": "Dealing with Praises and Insults",
+        "author": "Chintamani Sakhi Devi Dasi",
+        "reading_time": "3 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/Praise-Insult.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/dealing-with-praises-and-insults.html",
+        "description": "Most of us will wonder, What is the big deal in dealing with praises?",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/dealing-with-praises-and-insults/"
+      },
+      {
+        "id": "article_7",
+        "title": "The Process of SURRENDER",
+        "author": "Narasimha Swami",
+        "reading_time": "7 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/Surrender.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-process-of-surrender.html",
+        "description": "Lord Krishna's main message in the Bhagavad-gita is clear: He wants us to fully surrender to Him.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-process-of-surrender/"
+      },
+      {
+        "id": "article_8",
+        "title": "The H1B Visa – Is the Honeymoon Over for Indians?",
+        "author": "BTG Editorial Team",
+        "reading_time": "4 mins",
+        "date": "November 2025",
+        "image": "/btg_magazine_images/Editorial-3.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-h1b-visa-is-the-honeymoon-over-for-indians.html",
+        "description": "The H-1B visa is a work visa that's valid for three years and can be renewed for another three years.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-h1b-visa-is-the-honeymoon-over-for-indians/"
+      }
+    ]
+  }
+]
