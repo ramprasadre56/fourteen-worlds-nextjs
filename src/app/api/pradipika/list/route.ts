@@ -73,10 +73,15 @@ export async function GET(request: NextRequest) {
             offset
         });
 
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('List error:', error);
+        const errorMessage = error instanceof Error 
+            ? error.message 
+            : typeof error === 'object' && error !== null && 'message' in error
+                ? String((error as { message: unknown }).message)
+                : 'Unknown error occurred';
         return NextResponse.json(
-            { success: false, error: String(error) },
+            { success: false, error: errorMessage },
             { status: 500 }
         );
     }

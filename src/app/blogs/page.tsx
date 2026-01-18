@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ExternalLink, RefreshCw, Wifi, Database } from 'lucide-react';
+import { RefreshCw, Wifi, Database } from 'lucide-react';
 
 interface Blog {
     title: string;
@@ -69,7 +69,7 @@ export default function BlogsPage() {
     const sourceInfo = getSourceLabel();
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-[#F5F5F5]">
             {/* Sticky Header */}
             <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-4 px-8">
                 <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
@@ -103,7 +103,7 @@ export default function BlogsPage() {
             </div>
 
             {/* Content */}
-            <div className="px-4 py-6">
+            <div className="px-6 py-8">
                 {/* Loading State */}
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-20">
@@ -112,68 +112,47 @@ export default function BlogsPage() {
                         <p className="text-sm text-gray-400 mt-1">This may take a moment</p>
                     </div>
                 ) : (
-                    /* Pinterest-style Masonry Grid */
-                    <div
-                        className="mx-auto"
-                        style={{
-                            columnCount: 5,
-                            columnGap: '16px',
-                        }}
-                    >
-                        <style jsx>{`
-                            @media (max-width: 1536px) {
-                                div { column-count: 4 !important; }
-                            }
-                            @media (max-width: 1280px) {
-                                div { column-count: 3 !important; }
-                            }
-                            @media (max-width: 768px) {
-                                div { column-count: 2 !important; }
-                            }
-                            @media (max-width: 480px) {
-                                div { column-count: 1 !important; }
-                            }
-                        `}</style>
+                    /* Blog Cards Grid */
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-w-screen-2xl mx-auto">
                         {blogs.map((blog, index) => (
                             <Link
                                 key={`${blog.url}-${index}`}
                                 href={blog.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block mb-4 break-inside-avoid"
+                                className="block"
                             >
-                                <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
+                                <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer h-full">
                                     {/* Thumbnail */}
-                                    {blog.thumbnail && (
-                                        <div className="relative w-full overflow-hidden">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+                                        {blog.thumbnail ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
                                             <img
                                                 src={blog.thumbnail}
                                                 alt={blog.title}
-                                                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 loading="lazy"
                                                 onError={(e) => {
-                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                    (e.target as HTMLImageElement).src = '/placeholder-blog.png';
                                                 }}
                                             />
-                                            {/* Hover overlay */}
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                                        </div>
-                                    )}
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-red-100">
+                                                <span className="text-4xl">📖</span>
+                                            </div>
+                                        )}
+                                    </div>
 
                                     {/* Content */}
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-gray-800 leading-snug group-hover:text-red-600 transition-colors line-clamp-2">
+                                    <div className="p-5">
+                                        {/* Date */}
+                                        <p className="text-sm text-gray-500 mb-3 font-medium tracking-wide">
+                                            {blog.date}
+                                        </p>
+                                        {/* Title */}
+                                        <h3 className="text-base font-semibold text-gray-800 leading-relaxed group-hover:text-red-600 transition-colors line-clamp-3">
                                             {blog.title}
                                         </h3>
-                                        <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-                                            <span className="truncate max-w-[55%] font-medium">{blog.author}</span>
-                                            <span>{blog.date}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 mt-2 text-xs text-red-500 font-medium">
-                                            <ExternalLink size={12} />
-                                            <span>Read on ISKCON DT</span>
-                                        </div>
                                     </div>
                                 </article>
                             </Link>

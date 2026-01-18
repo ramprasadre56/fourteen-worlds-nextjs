@@ -53,14 +53,14 @@ export function AmazonHeader() {
                     </Link>
 
                     {/* Navigation Links (Center) */}
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-3 flex-shrink-0">
                         <Link
                             href="/library"
                             className="flex items-center gap-1 px-2 py-1 rounded transition-colors hover:bg-black/10"
                             style={{ color: colors.text }}
                         >
                             <Menu size={18} />
-                            <span className="text-sm font-bold">All</span>
+                            <span className="text-base font-semibold">All</span>
                         </Link>
 
                         {[
@@ -75,7 +75,7 @@ export function AmazonHeader() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="px-2 py-1 text-sm rounded transition-colors hover:bg-black/10 whitespace-nowrap"
+                                className="px-3 py-1.5 text-base font-medium rounded transition-colors hover:bg-black/10 whitespace-nowrap"
                                 style={{ color: colors.text }}
                             >
                                 {link.label}

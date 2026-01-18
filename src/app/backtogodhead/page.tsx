@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Book, Clock, User, FileText, Download, Lock } from 'lucide-react';
+import { Book, Clock, FileText, Download, Lock, Loader2, List, LayoutGrid } from 'lucide-react';
 import magazineData from '@/data/btg_magazine_data.json';
 
 interface Article {
@@ -25,6 +25,13 @@ interface Issue {
     articles: Article[];
 }
 
+interface PradipikaIssue {
+    issue_number: string;
+    title: string;
+    date: string;
+    pdf_url: string;
+}
+
 // Helper to convert path to slug
 function getArticleSlug(path: string): string {
     return path
@@ -32,27 +39,32 @@ function getArticleSlug(path: string): string {
         .replace('.html', '');
 }
 
-// Bhagavata Pradipika Issues
-const bhagavataPradipikaIssues = [
-    { issue_number: "102", title: "The Scripture that fills the Heart", date: "2025-12", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/Bhagavata_Pradipika_Issue_102-The_Scripture_that_fills_the_Heart_-_2025-12.pdf" },
-    { issue_number: "101", title: "In the Womb of Divine Protection", date: "2025-11", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/Bhagavata_Pradipika_Issue_101-In_the_Womb_of_Divine_Protection_-_2025-11.pdf" },
-    { issue_number: "100", title: "Kartik Special", date: "2025-10", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/Bhagavata_Pradipika_Issue_100-Kartik_Special_-_2025-10.pdf" },
-    { issue_number: "99", title: "Krishna never leaves your Side", date: "2025-09", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/99_-_Bhagavata_Pradipika_Issue_99-Krishna_never_leaves_your_Side_-_2025-09.pdf" },
-    { issue_number: "98", title: "The Real Spirit of Janmastami", date: "2025-08", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/98_-_Bhagavata_Pradipika_Issue_98-The_Real_Spirit_of_Janmastami-Inviting_Krsna_into_our_Hearts_-_2025-08.pdf" },
-    { issue_number: "97", title: "When the Intention Isn't Right", date: "2025-07", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/97_-_Bhagavata_Pradipika_Issue_97-When_the_Intention_Isn%E2%80%99t_Right_But_the_Association_Is_-_2025-07.pdf" },
-    { issue_number: "96", title: "Do You Truly Want Your Dependents to Advance", date: "2025-06", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/96_-_Bhagavata_Pradipika_Issue_96-Do_you_Truly_Want_your_Dependents_to_Advance_-_2025-06.pdf" },
-    { issue_number: "95", title: "A Devotee's Compassion", date: "2025-05", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/95_-_Bhagavata_Pradipika_Issue_95-A_Devotee%27s_Compassion_-_2025-05.pdf" },
-    { issue_number: "94", title: "Epitome of Forgiveness", date: "2025-04", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/94_-_Bhagavata_Pradipika_Issue_94-Epitome_of_Forgiveness_-_2025-04.pdf" },
-    { issue_number: "93", title: "An Unwarranted Distraction", date: "2025-03", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/93_-_Bhagavata_Pradipika_Issue_93-An_Unwarranted_Distraction_-_2025-03.pdf" },
-    { issue_number: "92", title: "Me Mind and Bhakti-Dissatisfaction", date: "2025-02", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/92_-_Bhagavata_Pradipika_Issue_92-Me_Mind_and_Bhakti-Dissatisfaction_-_2025-02.pdf" },
-    { issue_number: "91", title: "Three Qualities of KRSNA's Name", date: "2025-01", pdf_url: "https://ebooks.iskcondesiretree.com/pdf/Bhagavata_Pradipika/91_-_Bhagavata_Pradipika_Issue_91-Three_Qualities_of_KRSNA%27s_Name_-_2025-01.pdf" },
-];
-
 export default function BackToGodheadPage() {
     const [activeTab, setActiveTab] = useState<'btg' | 'pradipika'>('btg');
     const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+    const [pradipikaIssues, setPradipikaIssues] = useState<PradipikaIssue[]>([]);
+    const [isLoadingPradipika, setIsLoadingPradipika] = useState(false);
+    const [pradipikaViewMode, setPradipikaViewMode] = useState<'grid' | 'list'>('grid');
 
     const issues: Issue[] = magazineData as Issue[];
+
+    // Fetch Bhagavata Pradipika issues when tab is activated
+    useEffect(() => {
+        if (activeTab === 'pradipika' && pradipikaIssues.length === 0) {
+            setIsLoadingPradipika(true);
+            fetch('/api/pradipika')
+                .then(res => res.json())
+                .then(data => {
+                    setPradipikaIssues(data);
+                })
+                .catch(err => {
+                    console.error('Failed to fetch Pradipika issues:', err);
+                })
+                .finally(() => {
+                    setIsLoadingPradipika(false);
+                });
+        }
+    }, [activeTab, pradipikaIssues.length]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
@@ -107,47 +119,50 @@ export default function BackToGodheadPage() {
                                 <p className="text-gray-600">{selectedIssue.articles.length} articles</p>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                                 {selectedIssue.articles.map((article, idx) => (
                                     <Link
                                         key={article.id || idx}
                                         href={`/backtogodhead/article/${getArticleSlug(article.path)}`}
-                                        className="group"
+                                        className="group block"
                                     >
-                                        <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all h-full flex flex-col">
-                                            {article.image && (
-                                                <div className="relative h-48 overflow-hidden">
-                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full">
+                                            {/* Thumbnail */}
+                                            <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+                                                {article.image ? (
+                                                    // eslint-disable-next-line @next/next/no-img-element
                                                     <img
                                                         src={article.image}
                                                         alt={article.title}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
-                                                    {article.is_premium && (
-                                                        <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
-                                                            <Lock size={10} />
-                                                            Premium
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                            <div className="p-4 flex-1 flex flex-col">
-                                                <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">
-                                                    {article.title}
-                                                </h3>
-                                                <p className="text-sm text-gray-500 mb-3 line-clamp-2 flex-1">
-                                                    {article.description}
-                                                </p>
-                                                <div className="flex items-center gap-4 text-xs text-gray-400">
-                                                    <span className="flex items-center gap-1">
-                                                        <User size={12} />
-                                                        {article.author?.split(' ').slice(-2).join(' ')}
-                                                    </span>
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
+                                                        <span className="text-4xl">📖</span>
+                                                    </div>
+                                                )}
+                                                {article.is_premium && (
+                                                    <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
+                                                        <Lock size={10} />
+                                                        Premium
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* Content */}
+                                            <div className="p-5">
+                                                {/* Author & Read Time */}
+                                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 font-medium tracking-wide">
+                                                    <span className="truncate">{article.author?.split(' ').slice(-2).join(' ')}</span>
+                                                    <span>•</span>
                                                     <span className="flex items-center gap-1">
                                                         <Clock size={12} />
                                                         {article.reading_time}
                                                     </span>
                                                 </div>
+                                                {/* Title */}
+                                                <h3 className="text-base font-semibold text-gray-800 leading-relaxed group-hover:text-orange-600 transition-colors line-clamp-3">
+                                                    {article.title}
+                                                </h3>
                                             </div>
                                         </article>
                                     </Link>
@@ -193,75 +208,132 @@ export default function BackToGodheadPage() {
                 ) : (
                     /* Bhagavata Pradipika Tab */
                     <div>
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-2">Bhagavata Pradipika</h2>
-                            <p className="text-gray-600">
-                                Monthly spiritual newsletter from ISKCON Desire Tree
-                            </p>
-                        </div>
-
-                        {/* Featured Latest Issue */}
-                        <div className="mb-8 bg-gradient-to-r from-orange-100 to-amber-50 rounded-2xl p-6">
-                            <div className="flex flex-col md:flex-row gap-6 items-center">
-                                <div className="w-48 h-64 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl shadow-lg flex items-center justify-center flex-shrink-0">
-                                    <div className="text-center text-white">
-                                        <div className="text-5xl font-bold mb-2">#{bhagavataPradipikaIssues[0]?.issue_number}</div>
-                                        <div className="text-sm opacity-90">Latest Issue</div>
-                                    </div>
-                                </div>
-                                <div className="flex-1 text-center md:text-left">
-                                    <div className="text-sm text-orange-600 font-medium mb-2">{bhagavataPradipikaIssues[0]?.date}</div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-3">{bhagavataPradipikaIssues[0]?.title}</h3>
-                                    <p className="text-gray-600 mb-4">
-                                        Read the latest insights from Śrīmad-Bhāgavatam commentary and spiritual wisdom.
-                                    </p>
-                                    <a
-                                        href={bhagavataPradipikaIssues[0]?.pdf_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-colors"
-                                    >
-                                        <Download size={18} />
-                                        Download Latest Issue
-                                    </a>
-                                </div>
+                        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Bhagavata Pradipika</h2>
+                                <p className="text-gray-600">
+                                    Monthly spiritual newsletter from ISKCON Desire Tree
+                                </p>
+                            </div>
+                            {/* View Toggle */}
+                            <div className="flex items-center bg-gray-100 rounded-full p-1">
+                                <button
+                                    onClick={() => setPradipikaViewMode('list')}
+                                    className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${pradipikaViewMode === 'list'
+                                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                        }`}
+                                    title="List View"
+                                >
+                                    <List size={20} />
+                                </button>
+                                <button
+                                    onClick={() => setPradipikaViewMode('grid')}
+                                    className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${pradipikaViewMode === 'grid'
+                                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                        }`}
+                                    title="Grid View"
+                                >
+                                    <LayoutGrid size={20} />
+                                </button>
                             </div>
                         </div>
 
-                        {/* Issue Archive Grid */}
-                        <h3 className="text-lg font-bold text-gray-700 mb-4">Issue Archive</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                            {bhagavataPradipikaIssues.slice(1).map((issue) => (
-                                <a
-                                    key={issue.issue_number}
-                                    href={issue.pdf_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group"
-                                >
-                                    <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100 group-hover:border-orange-300">
-                                        {/* Cover Image Placeholder */}
-                                        <div className="h-36 bg-gradient-to-br from-orange-200 to-amber-100 flex items-center justify-center relative">
-                                            <div className="text-3xl font-bold text-orange-600">#{issue.issue_number}</div>
-                                            <div className="absolute top-2 right-2 text-[10px] bg-white/80 px-2 py-0.5 rounded text-gray-600">
-                                                {issue.date}
+                        {/* Issue Grid - Blog Card Style */}
+                        {isLoadingPradipika ? (
+                            <div className="flex items-center justify-center py-20">
+                                <Loader2 className="w-8 h-8 animate-spin text-orange-600" />
+                                <span className="ml-2 text-gray-600">Loading issues...</span>
+                            </div>
+                        ) : pradipikaViewMode === 'grid' ? (
+                            /* Grid View */
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                                {pradipikaIssues.map((issue) => (
+                                    <a
+                                        key={issue.issue_number}
+                                        href={issue.pdf_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group block"
+                                    >
+                                        <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full">
+                                            {/* Thumbnail */}
+                                            <div className="relative w-full aspect-[4/3] overflow-hidden">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src="/bhagavata-pradipika-cover.jpg"
+                                                    alt={issue.title}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                />
+                                                {/* Issue Number Badge */}
+                                                <div className="absolute top-2 left-2 bg-orange-600 text-white px-2 py-1 rounded text-sm font-bold">
+                                                    #{issue.issue_number}
+                                                </div>
                                             </div>
-                                        </div>
-                                        {/* Title & Download */}
-                                        <div className="p-3">
-                                            <h4 className="text-xs font-medium text-gray-800 group-hover:text-orange-600 transition-colors line-clamp-2 mb-2 min-h-[32px]">
-                                                {issue.title}
-                                            </h4>
-                                            <div className="flex items-center gap-1 text-orange-600 text-[10px]">
-                                                <Download size={10} />
-                                                <span>PDF</span>
+                                            {/* Content */}
+                                            <div className="p-5">
+                                                {/* Date */}
+                                                <p className="text-sm text-gray-500 mb-3 font-medium tracking-wide">
+                                                    {issue.date}
+                                                </p>
+                                                {/* Title */}
+                                                <h3 className="text-base font-semibold text-gray-800 leading-relaxed group-hover:text-orange-600 transition-colors line-clamp-2 mb-3">
+                                                    {issue.title}
+                                                </h3>
+                                                {/* Download CTA */}
+                                                <div className="flex items-center gap-1 text-orange-600 text-sm font-medium">
+                                                    <Download size={14} />
+                                                    <span>Download PDF</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-
+                                        </article>
+                                    </a>
+                                ))}
+                            </div>
+                        ) : (
+                            /* List View */
+                            <div className="flex flex-col gap-3">
+                                {pradipikaIssues.map((issue) => (
+                                    <a
+                                        key={issue.issue_number}
+                                        href={issue.pdf_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group block"
+                                    >
+                                        <article className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-4 p-4">
+                                            {/* Small Thumbnail */}
+                                            <div className="relative w-20 h-16 flex-shrink-0 rounded overflow-hidden">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src="/bhagavata-pradipika-cover.jpg"
+                                                    alt={issue.title}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                                                    <span className="text-white text-xs font-bold">#{issue.issue_number}</span>
+                                                </div>
+                                            </div>
+                                            {/* Content */}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs text-gray-500 font-medium tracking-wide mb-1">
+                                                    {issue.date}
+                                                </p>
+                                                <h3 className="text-base font-semibold text-gray-800 group-hover:text-orange-600 transition-colors truncate">
+                                                    {issue.title}
+                                                </h3>
+                                            </div>
+                                            {/* Download Button */}
+                                            <div className="flex items-center gap-1 text-orange-600 text-sm font-medium flex-shrink-0">
+                                                <Download size={16} />
+                                                <span className="hidden sm:inline">Download</span>
+                                            </div>
+                                        </article>
+                                    </a>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

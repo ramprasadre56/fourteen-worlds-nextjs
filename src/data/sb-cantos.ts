@@ -1,4 +1,4 @@
-// Srimad Bhagavatam Cantos data
+// Srimad Bhagavatam Cantos and Volumes data
 
 export interface SBCanto {
     number: number;
@@ -6,6 +6,15 @@ export interface SBCanto {
     titleSanskrit: string;
     chapters: number;
     summary: string;
+}
+
+export interface SBVolume {
+    id: string;
+    cantoNumber: number;
+    partNumber?: number;
+    displayName: string;
+    coverImage: string;
+    href: string;
 }
 
 export const SB_CANTOS: SBCanto[] = [
@@ -95,6 +104,32 @@ export const SB_CANTOS: SBCanto[] = [
     },
 ];
 
+// 18 Physical Volumes as per BBT Publications
+export const SB_VOLUMES: SBVolume[] = [
+    { id: 'sb-1', cantoNumber: 1, displayName: 'Srimad Bhagavatam Canto 1', coverImage: '/books/sb/sb-1.png', href: '/library/sb/1' },
+    { id: 'sb-2', cantoNumber: 2, displayName: 'Srimad Bhagavatam Canto 2', coverImage: '/books/sb/sb-2.png', href: '/library/sb/2' },
+    { id: 'sb-3-1', cantoNumber: 3, partNumber: 1, displayName: 'Srimad Bhagavatam Canto 3.1', coverImage: '/books/sb/sb-3-1.png', href: '/library/sb/3' },
+    { id: 'sb-3-2', cantoNumber: 3, partNumber: 2, displayName: 'Srimad Bhagavatam Canto 3.2', coverImage: '/books/sb/sb-3-2.png', href: '/library/sb/3' },
+    { id: 'sb-4-1', cantoNumber: 4, partNumber: 1, displayName: 'Srimad Bhagavatam Canto 4.1', coverImage: '/books/sb/sb-4-1.png', href: '/library/sb/4' },
+    { id: 'sb-4-2', cantoNumber: 4, partNumber: 2, displayName: 'Srimad Bhagavatam Canto 4.2', coverImage: '/books/sb/sb-4-2.png', href: '/library/sb/4' },
+    { id: 'sb-5', cantoNumber: 5, displayName: 'Srimad Bhagavatam Canto 5', coverImage: '/books/sb/sb-5.png', href: '/library/sb/5' },
+    { id: 'sb-6', cantoNumber: 6, displayName: 'Srimad Bhagavatam Canto 6', coverImage: '/books/sb/sb-6.png', href: '/library/sb/6' },
+    { id: 'sb-7', cantoNumber: 7, displayName: 'Srimad Bhagavatam Canto 7', coverImage: '/books/sb/sb-7.png', href: '/library/sb/7' },
+    { id: 'sb-8', cantoNumber: 8, displayName: 'Srimad Bhagavatam Canto 8', coverImage: '/books/sb/sb-8.png', href: '/library/sb/8' },
+    { id: 'sb-9', cantoNumber: 9, displayName: 'Srimad Bhagavatam Canto 9', coverImage: '/books/sb/sb-9.png', href: '/library/sb/9' },
+    { id: 'sb-10-1', cantoNumber: 10, partNumber: 1, displayName: 'Srimad Bhagavatam Canto 10.1', coverImage: '/books/sb/sb-10-1.png', href: '/library/sb/10' },
+    { id: 'sb-10-2', cantoNumber: 10, partNumber: 2, displayName: 'Srimad Bhagavatam Canto 10.2', coverImage: '/books/sb/sb-10-2.png', href: '/library/sb/10' },
+    { id: 'sb-10-3', cantoNumber: 10, partNumber: 3, displayName: 'Srimad Bhagavatam Canto 10.3', coverImage: '/books/sb/sb-10-3.png', href: '/library/sb/10' },
+    { id: 'sb-10-4', cantoNumber: 10, partNumber: 4, displayName: 'Srimad Bhagavatam Canto 10.4', coverImage: '/books/sb/sb-10-4.png', href: '/library/sb/10' },
+    { id: 'sb-11-1', cantoNumber: 11, partNumber: 1, displayName: 'Srimad Bhagavatam Canto 11.1', coverImage: '/books/sb/sb-11-1.png', href: '/library/sb/11' },
+    { id: 'sb-11-2', cantoNumber: 11, partNumber: 2, displayName: 'Srimad Bhagavatam Canto 11.2', coverImage: '/books/sb/sb-11-2.png', href: '/library/sb/11' },
+    { id: 'sb-12', cantoNumber: 12, displayName: 'Srimad Bhagavatam Canto 12', coverImage: '/books/sb/sb-12.png', href: '/library/sb/12' },
+];
+
 export function getCanto(cantoNum: number): SBCanto | undefined {
     return SB_CANTOS.find(c => c.number === cantoNum);
+}
+
+export function getVolumesByCanto(cantoNum: number): SBVolume[] {
+    return SB_VOLUMES.filter(v => v.cantoNumber === cantoNum);
 }
