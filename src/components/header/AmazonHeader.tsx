@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { Search, ShoppingCart, Menu, ChevronDown, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, ChevronDown, Heart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 
 // Color scheme - Vedabase.io inspired warm tones
@@ -81,26 +81,6 @@ export function AmazonHeader() {
                                 {link.label}
                             </Link>
                         ))}
-                    </div>
-
-                    {/* Search Bar (Flexible Center) */}
-                    <div className="flex-1 min-w-[200px] max-w-[400px]">
-                        <div className="flex w-full">
-                            <input
-                                type="text"
-                                placeholder="Search scriptures, articles..."
-                                className="flex-1 px-3 py-1.5 text-sm bg-white border-none rounded-l focus:outline-2"
-                                style={{ outlineColor: colors.accent }}
-                            />
-                            <button
-                                className="px-3 py-1.5 rounded-r cursor-pointer transition-colors"
-                                style={{ backgroundColor: colors.accent }}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#6b3a0f'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.accent}
-                            >
-                                <Search size={16} color="white" />
-                            </button>
-                        </div>
                     </div>
 
                     {/* Right Section (Account, Cart, Donate) */}

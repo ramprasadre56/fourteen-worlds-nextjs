@@ -96,16 +96,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <article className="w-full px-8 py-8">
                 {/* Article Header */}
                 <header className="mb-10 text-center max-w-4xl mx-auto">
-                    {article.image && (
-                        <div className="relative w-full max-w-2xl mx-auto h-64 md:h-80 rounded-lg overflow-hidden mb-8 shadow-lg">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={article.image}
-                                alt={article.title}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    )}
 
                     <h1 className="text-4xl md:text-5xl font-serif font-bold text-amber-900 mb-4 leading-tight">
                         {article.title}

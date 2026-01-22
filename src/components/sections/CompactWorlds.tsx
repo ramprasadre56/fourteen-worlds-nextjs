@@ -13,9 +13,9 @@ function WorldsSection({ worlds, title, icon, color }: WorldsSectionProps) {
     return (
         <div className="p-6 bg-gray-50 rounded-xl mb-4">
             <div className="flex flex-col w-full gap-3">
-                <div className="flex items-center gap-2">
-                    <span className="text-xl">{icon}</span>
-                    <h3 className="text-lg font-semibold" style={{ color }}>
+                <div className="flex items-center gap-3">
+                    <span className="text-2xl">{icon}</span>
+                    <h3 className="text-xl font-semibold" style={{ color }}>
                         {title}
                     </h3>
                 </div>
@@ -30,7 +30,7 @@ function WorldsSection({ worlds, title, icon, color }: WorldsSectionProps) {
                             onMouseEnter={(e) => e.currentTarget.style.borderColor = color}
                             onMouseLeave={(e) => e.currentTarget.style.borderColor = 'transparent'}
                         >
-                            <span className="text-sm font-medium text-gray-800">
+                            <span className="text-base font-medium text-gray-800">
                                 {world.name}
                             </span>
                         </div>

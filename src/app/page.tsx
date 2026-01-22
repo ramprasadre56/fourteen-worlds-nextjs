@@ -25,13 +25,13 @@ function CompactLotusSection() {
           className="rounded-lg object-cover"
         />
         <div className="flex-1 flex flex-col items-start gap-2">
-          <h2 className="text-lg font-bold" style={{ color: '#8B0000' }}>
+          <h2 className="text-xl font-bold" style={{ color: '#8B0000' }}>
             🌺 The Lotus Flower Cosmology
           </h2>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-base text-gray-700 leading-relaxed">
             {LOTUS_COSMOLOGY.description.substring(0, 200)}...
           </p>
-          <p className="text-xs text-gray-400 italic">
+          <p className="text-sm text-gray-500 italic">
             — {LOTUS_COSMOLOGY.reference}
           </p>
         </div>
@@ -47,7 +47,7 @@ function CompactIntroductionSection() {
         <h2 className="text-2xl font-bold text-center" style={{ color: '#8B0000' }}>
           {LOKA_TRAYA_INFO.title}
         </h2>
-        <p className="text-sm text-gray-600 text-center leading-relaxed mb-4">
+        <p className="text-base text-gray-700 text-center leading-relaxed mb-4">
           {LOKA_TRAYA_INFO.description}
         </p>
 
@@ -61,13 +61,13 @@ function CompactIntroductionSection() {
               borderColor: '#DAA520'
             }}
           >
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">☀️</span>
+            <div className="flex items-start gap-3">
+              <span className="text-3xl">☀️</span>
               <div className="flex flex-col items-start">
-                <span className="font-semibold text-sm" style={{ color: '#DAA520' }}>
+                <span className="font-semibold text-base" style={{ color: '#DAA520' }}>
                   {LOKA_TRAYA_INFO.upperWorld.name}
                 </span>
-                <span className="text-xs text-gray-600 leading-snug">
+                <span className="text-sm text-gray-700 leading-relaxed">
                   {LOKA_TRAYA_INFO.upperWorld.description}
                 </span>
               </div>
@@ -82,13 +82,13 @@ function CompactIntroductionSection() {
               borderColor: '#6B8E23'
             }}
           >
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">🌍</span>
+            <div className="flex items-start gap-3">
+              <span className="text-3xl">🌍</span>
               <div className="flex flex-col items-start">
-                <span className="font-semibold text-sm" style={{ color: '#6B8E23' }}>
+                <span className="font-semibold text-base" style={{ color: '#6B8E23' }}>
                   {LOKA_TRAYA_INFO.middleWorld.name}
                 </span>
-                <span className="text-xs text-gray-600 leading-snug">
+                <span className="text-sm text-gray-700 leading-relaxed">
                   {LOKA_TRAYA_INFO.middleWorld.description}
                 </span>
               </div>
@@ -103,13 +103,13 @@ function CompactIntroductionSection() {
               borderColor: '#8B4513'
             }}
           >
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">🌑</span>
+            <div className="flex items-start gap-3">
+              <span className="text-3xl">🌑</span>
               <div className="flex flex-col items-start">
-                <span className="font-semibold text-sm" style={{ color: '#8B4513' }}>
+                <span className="font-semibold text-base" style={{ color: '#8B4513' }}>
                   {LOKA_TRAYA_INFO.lowerWorld.name}
                 </span>
-                <span className="text-xs text-gray-600 leading-snug">
+                <span className="text-sm text-gray-700 leading-relaxed">
                   {LOKA_TRAYA_INFO.lowerWorld.description}
                 </span>
               </div>
@@ -125,10 +125,10 @@ function Footer() {
   return (
     <div className="w-full bg-gray-50 border-t border-gray-200">
       <div className="flex flex-col items-center gap-1 py-8">
-        <p className="text-sm text-gray-600 text-center">
+        <p className="text-base text-gray-700 text-center">
           Based on Śrīmad-Bhāgavatam and other Vedic scriptures
         </p>
-        <p className="text-xs text-gray-400 italic text-center">
+        <p className="text-sm text-gray-500 italic text-center">
           Source: bhu-mandala cosmological research and vedabase.io
         </p>
       </div>

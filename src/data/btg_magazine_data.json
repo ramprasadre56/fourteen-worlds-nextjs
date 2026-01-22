@@ -1,5 +1,102 @@
 [
   {
+    "issue": "January 2026",
+    "cover_image": "/btg_magazine_images/january_2026/C1-cover.jpg",
+    "articles": [
+      {
+        "id": "jan_2026_1",
+        "title": "A Life of True Devotion",
+        "author": "His Holiness Nava Yogendra Swami Maharaja",
+        "reading_time": "2 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/Atut_Bhakti.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/a-life-of-true-devotion.html",
+        "description": "The Golden Jubilee of Sannyasa - celebrating 50 years of dedication to Srila Prabhupada's mission.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/a-life-of-true-devotion/"
+      },
+      {
+        "id": "jan_2026_2",
+        "title": "The Spiritual Power of Hearing",
+        "author": "His Divine Grace A. C. Bhaktivedanta Swami Prabhupada",
+        "reading_time": "9 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/SPlec.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-spiritual-power-of-hearing.html",
+        "description": "Despite our lack of spiritual qualifications, we can transcend material existence by hearing Lord Krishna's teachings.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-spiritual-power-of-hearing/"
+      },
+      {
+        "id": "jan_2026_3",
+        "title": "What Makes Us Stay",
+        "author": "Rakesh Roshan",
+        "reading_time": "5 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/DevoteesAttacked.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/what-makes-us-stay.html",
+        "description": "We remain in Krishna consciousness not because we are strong, but because we are supported by the right association.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/what-makes-us-stay/"
+      },
+      {
+        "id": "jan_2026_4",
+        "title": "A Temple Built on Devotion",
+        "author": "Radhika Kripa Devi Dasi",
+        "reading_time": "6 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/Temple.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/a-temple-built-on-devotion.html",
+        "description": "The newly inaugurated ISKCON Temple in Gurugram Sector 45 - a splendid fusion of Rajasthani architectural grandeur and Vaishnava devotional culture.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/a-temple-built-on-devotion/"
+      },
+      {
+        "id": "jan_2026_5",
+        "title": "The Salt in the Water",
+        "author": "Vrajabihari Dasa",
+        "reading_time": "7 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/Svetaketu.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-salt-in-the-water.html",
+        "description": "The timeless wisdom from the story of Svetaketu reveals how true knowledge awakens our personal relationship with Krishna.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-salt-in-the-water/"
+      },
+      {
+        "id": "jan_2026_6",
+        "title": "Three Worldviews That Fail Us",
+        "author": "Chaitanya Charana Dasa",
+        "reading_time": "8 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/BhagavadGitaReading.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/three-worldviews-that-fail-us.html",
+        "description": "The Gita encourages going beyond desire, dread, and despair to embrace devotion.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/three-worldviews-that-fail-us/"
+      },
+      {
+        "id": "jan_2026_7",
+        "title": "Pop Music, Western Culture and Hare Krishna",
+        "author": "Syamananda Dasa",
+        "reading_time": "4 mins",
+        "date": "January 2026",
+        "image": "/btg_magazine_images/january_2026/Editorial.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/pop-music-western-culture-and-hare-krishna.html",
+        "description": "How thousands of Soviet citizens became dedicated followers of the Krishna consciousness movement despite KGB persecution.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/pop-music-western-culture-and-hare-krishna/"
+      }
+    ]
+  },
+  {
     "issue": "December 2025",
     "cover_image": "/btg_magazine_images/december_2025/C2.png",
     "articles": [
