@@ -10,7 +10,6 @@ interface Quote {
     day: number;
 }
 
-// Get daily quote based on current date
 function getDailyQuote(): Quote {
     const now = new Date();
     const currentMonth = now.toLocaleString('en-US', { month: 'long' });
@@ -18,14 +17,12 @@ function getDailyQuote(): Quote {
 
     const quotes = (prabhupadaQuotes as any).quotes as Quote[];
 
-    // Find quote for today's month and day
     const todayQuote = quotes.find(
         q => q.month === currentMonth && q.day === currentDay
     );
 
     if (todayQuote) return todayQuote;
 
-    // Fallback to first quote
     return quotes[0] || {
         quote: "Chant Hare Krishna and be happy.",
         source: "Śrīla Prabhupāda",
@@ -41,36 +38,43 @@ export function PrabhupadaQuotes() {
 
     return (
         <div
-            className="p-6 rounded-xl shadow-sm border mt-6"
+            className="p-6 rounded-xl mt-6"
             style={{
-                background: 'linear-gradient(180deg, #fffef8 0%, #fff9e6 100%)',
-                borderColor: '#f0e6d2'
+                background: 'linear-gradient(180deg, #FFFDF5 0%, #FFF8E6 100%)',
+                border: '1px solid var(--color-border)',
+                borderTop: '3px solid var(--color-secondary)',
+                boxShadow: 'var(--shadow-sm)',
             }}
         >
-            <div className="flex flex-col items-center w-full gap-1">
+            <div className="flex flex-col items-center w-full gap-2">
                 {/* Date header */}
                 <p
-                    className="text-xs font-bold tracking-widest"
-                    style={{ color: '#666' }}
+                    className="text-xs font-bold tracking-[0.2em]"
+                    style={{ color: 'var(--color-text-muted)' }}
                 >
                     {dateDisplay}
                 </p>
 
                 {/* Opening quote mark */}
                 <p
-                    className="text-3xl mt-2"
-                    style={{ color: '#d4af37', lineHeight: 1 }}
+                    className="text-4xl mt-2"
+                    style={{
+                        color: 'var(--color-secondary)',
+                        fontFamily: 'var(--font-heading)',
+                        lineHeight: 0.8,
+                    }}
                 >
-                    ❝
+                    &ldquo;
                 </p>
 
                 {/* Quote text */}
                 <p
                     className="text-center text-lg italic max-w-[95%]"
                     style={{
-                        color: '#2d2d2d',
+                        color: 'var(--color-text)',
                         lineHeight: 1.9,
-                        fontFamily: "Georgia, 'Times New Roman', serif"
+                        fontFamily: 'var(--font-heading)',
+                        fontWeight: 400,
                     }}
                 >
                     {quote.quote}
@@ -78,16 +82,31 @@ export function PrabhupadaQuotes() {
 
                 {/* Closing quote mark */}
                 <p
-                    className="text-3xl"
-                    style={{ color: '#d4af37', lineHeight: 1 }}
+                    className="text-4xl"
+                    style={{
+                        color: 'var(--color-secondary)',
+                        fontFamily: 'var(--font-heading)',
+                        lineHeight: 0.8,
+                    }}
                 >
-                    ❞
+                    &rdquo;
                 </p>
+
+                {/* Ornamental divider */}
+                <div
+                    className="w-16 h-px mt-3"
+                    style={{
+                        background: 'linear-gradient(90deg, transparent, var(--color-secondary), transparent)',
+                    }}
+                />
 
                 {/* Attribution */}
                 <p
-                    className="text-sm font-semibold mt-2"
-                    style={{ color: '#8B4513' }}
+                    className="text-sm font-semibold mt-1"
+                    style={{
+                        color: 'var(--color-accent)',
+                        fontFamily: 'var(--font-body)',
+                    }}
                 >
                     — Śrīla Prabhupāda
                 </p>

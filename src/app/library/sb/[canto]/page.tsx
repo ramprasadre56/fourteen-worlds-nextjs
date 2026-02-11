@@ -22,103 +22,180 @@ export default async function SBCantoPage({ params }: PageProps) {
         notFound();
     }
 
-    // Generate chapter list
     const chapters = Array.from({ length: canto.chapters }, (_, i) => i + 1);
     const prevCanto = cantoNum > 1 ? cantoNum - 1 : null;
     const nextCanto = cantoNum < 12 ? cantoNum + 1 : null;
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="w-full px-8">
+        <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+
                 {/* Breadcrumb */}
-                <nav className="text-sm mb-6">
-                    <Link href="/library" className="text-gray-500 hover:underline">Library</Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <Link href="/library/sb" className="text-gray-500 hover:underline">Śrīmad-Bhāgavatam</Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <span className="text-gray-800">Canto {cantoNum}</span>
+                <nav style={{ marginBottom: '1.5rem', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/library" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Library
+                    </Link>
+                    <span style={{ margin: '0 0.5rem', color: 'var(--color-border)' }}>»</span>
+                    <Link href="/library/sb" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Śrīmad-Bhāgavatam
+                    </Link>
                 </nav>
 
                 {/* Canto Header */}
-                <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                    <p className="text-sm text-gray-500 mb-2">
+                <div style={{ marginBottom: '2rem' }}>
+                    <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--color-text-muted)',
+                        marginBottom: '0.25rem',
+                    }}>
                         Canto {cantoNum} of 12
                     </p>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                    <h1 style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'var(--text-4xl)',
+                        fontWeight: 700,
+                        color: 'var(--color-primary)',
+                        marginBottom: '0.5rem',
+                    }}>
                         {canto.title}
                     </h1>
-                    <p
-                        className="text-xl italic mb-4"
-                        style={{ color: '#4A5568' }}
-                    >
+                    <p style={{
+                        fontSize: 'var(--text-xl)',
+                        fontStyle: 'italic',
+                        color: 'var(--color-secondary-dark)',
+                        marginBottom: '1rem',
+                        fontFamily: 'var(--font-heading)',
+                    }}>
                         {canto.titleSanskrit}
                     </p>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p style={{
+                        fontSize: 'var(--text-base)',
+                        color: 'var(--color-text-secondary)',
+                        lineHeight: 1.7,
+                    }}>
                         {canto.summary}
                     </p>
-                    <p className="text-sm text-gray-400 mt-4">
+                    <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--color-text-muted)',
+                        marginTop: '0.75rem',
+                    }}>
                         {canto.chapters} chapters
                     </p>
+                    <div style={{
+                        marginTop: '1.5rem',
+                        height: '2px',
+                        background: 'linear-gradient(90deg, var(--color-secondary), transparent)',
+                    }} />
                 </div>
 
                 {/* Chapters List */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
-                        Chapters
-                    </h2>
-                    <div className="grid grid-cols-1 divide-y divide-gray-100">
-                        {chapters.map((chapter) => (
-                            <Link
-                                key={chapter}
-                                href={`/library/sb/${cantoNum}/${chapter}`}
-                                className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
-                            >
-                                <div
-                                    className="flex items-center justify-center w-10 h-10 rounded-full font-medium text-white"
-                                    style={{ backgroundColor: '#718096' }}
-                                >
-                                    {chapter}
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="font-medium text-gray-800">
-                                        Chapter {chapter}
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                        SB {cantoNum}.{chapter}
-                                    </p>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {chapters.map((chapter) => (
+                        <Link
+                            key={chapter}
+                            href={`/library/sb/${cantoNum}/${chapter}`}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '1rem',
+                                padding: '1rem 0',
+                                borderBottom: '1px solid var(--color-border-light)',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            <span style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '2.5rem',
+                                height: '2.5rem',
+                                borderRadius: 'var(--radius-full)',
+                                background: 'var(--color-primary)',
+                                color: '#F5EDE0',
+                                fontWeight: 700,
+                                fontSize: 'var(--text-sm)',
+                                flexShrink: 0,
+                            }}>
+                                {chapter}
+                            </span>
+                            <span style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontWeight: 600,
+                                fontSize: 'var(--text-base)',
+                                color: 'var(--color-text)',
+                            }}>
+                                Chapter {chapter}
+                            </span>
+                        </Link>
+                    ))}
                 </div>
 
                 {/* Navigation */}
-                <div className="flex justify-between mt-8">
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: '2.5rem',
+                    paddingTop: '1.5rem',
+                    borderTop: '2px solid var(--color-secondary)',
+                }}>
                     {prevCanto ? (
                         <Link
                             href={`/library/sb/${prevCanto}`}
-                            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.625rem 1.25rem',
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius-lg)',
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-sm)',
+                                fontWeight: 500,
+                                textDecoration: 'none',
+                            }}
                         >
                             ← Canto {prevCanto}
                         </Link>
                     ) : (
                         <div />
                     )}
-                    {nextCanto && (
+                    <Link
+                        href="/library/sb"
+                        style={{
+                            color: 'var(--color-primary)',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 600,
+                            fontSize: 'var(--text-sm)',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        All Cantos
+                    </Link>
+                    {nextCanto ? (
                         <Link
                             href={`/library/sb/${nextCanto}`}
-                            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.625rem 1.25rem',
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius-lg)',
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-sm)',
+                                fontWeight: 500,
+                                textDecoration: 'none',
+                            }}
                         >
                             Canto {nextCanto} →
                         </Link>
+                    ) : (
+                        <div />
                     )}
-                </div>
-
-                {/* Back link */}
-                <div className="mt-4 text-center">
-                    <Link href="/library/sb" className="text-purple-600 hover:underline">
-                        ← Back to All Cantos
-                    </Link>
                 </div>
             </div>
         </div>

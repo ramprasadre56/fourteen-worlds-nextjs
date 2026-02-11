@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-// Bhagavad Gita chapter data
 const chapters = [
     { number: 1, title: 'Observing the Armies on the Battlefield of Kurukṣetra', verses: 46 },
     { number: 2, title: 'Contents of the Gītā Summarized', verses: 72 },
@@ -24,61 +23,102 @@ const chapters = [
 
 export default function BhagavadGitaPage() {
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="w-full px-8">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1
-                        className="text-4xl font-bold mb-4"
-                        style={{ color: '#8B0000' }}
-                    >
-                        Bhagavad-gītā As It Is
-                    </h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        The eternal message of spiritual wisdom from ancient India,
-                        spoken by Lord Śrī Kṛṣṇa to His intimate devotee Arjuna
-                    </p>
-                    <p className="text-sm text-gray-400 mt-2">
-                        Translation and Commentary by His Divine Grace A.C. Bhaktivedanta Swami Prabhupāda
-                    </p>
-                </div>
+        <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+
+                {/* Breadcrumb */}
+                <nav style={{ marginBottom: '1.5rem', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/library" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Library
+                    </Link>
+                </nav>
+
+                {/* Title */}
+                <h1 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'var(--text-4xl)',
+                    fontWeight: 700,
+                    color: 'var(--color-primary)',
+                    marginBottom: '0.5rem',
+                }}>
+                    Bhagavad-gītā As It Is
+                </h1>
+                <p style={{
+                    fontSize: 'var(--text-base)',
+                    color: 'var(--color-text-muted)',
+                    marginBottom: '2rem',
+                }}>
+                    Translation and Commentary by His Divine Grace A.C. Bhaktivedanta Swami Prabhupāda
+                </p>
+                <div style={{
+                    height: '2px',
+                    marginBottom: '2rem',
+                    background: 'linear-gradient(90deg, var(--color-secondary), transparent)',
+                }} />
 
                 {/* Chapters List */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="grid grid-cols-1 divide-y divide-gray-100">
-                        {chapters.map((chapter) => (
-                            <Link
-                                key={chapter.number}
-                                href={`/library/bg/${chapter.number}`}
-                                className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
-                            >
-                                <div
-                                    className="flex items-center justify-center w-12 h-12 rounded-full font-bold text-white"
-                                    style={{ backgroundColor: '#8B0000' }}
-                                >
-                                    {chapter.number}
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-gray-800">
-                                        Chapter {chapter.number}
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        {chapter.title}
-                                    </p>
-                                </div>
-                                <div className="text-sm text-gray-400">
-                                    {chapter.verses} verses
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {chapters.map((chapter) => (
+                        <Link
+                            key={chapter.number}
+                            href={`/library/bg/${chapter.number}`}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '1rem',
+                                padding: '1rem 0',
+                                borderBottom: '1px solid var(--color-border-light)',
+                                textDecoration: 'none',
+                                transition: 'all var(--transition-fast)',
+                            }}
+                        >
+                            <span style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '2.5rem',
+                                height: '2.5rem',
+                                borderRadius: 'var(--radius-full)',
+                                background: 'var(--color-primary)',
+                                color: '#F5EDE0',
+                                fontWeight: 700,
+                                fontSize: 'var(--text-sm)',
+                                flexShrink: 0,
+                            }}>
+                                {chapter.number}
+                            </span>
+                            <div style={{ flex: 1 }}>
+                                <span style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    fontWeight: 600,
+                                    fontSize: 'var(--text-base)',
+                                    color: 'var(--color-text)',
+                                }}>
+                                    {chapter.title}
+                                </span>
+                            </div>
+                            <span style={{
+                                fontSize: 'var(--text-sm)',
+                                color: 'var(--color-text-muted)',
+                                flexShrink: 0,
+                            }}>
+                                {chapter.verses} verses
+                            </span>
+                        </Link>
+                    ))}
                 </div>
 
                 {/* Back link */}
-                <div className="mt-8 text-center">
+                <div style={{ marginTop: '2rem', textAlign: 'center' }}>
                     <Link
                         href="/library"
-                        className="text-purple-600 hover:underline"
+                        style={{
+                            color: 'var(--color-primary)',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 600,
+                            fontSize: 'var(--text-sm)',
+                            textDecoration: 'none',
+                        }}
                     >
                         ← Back to Library
                     </Link>

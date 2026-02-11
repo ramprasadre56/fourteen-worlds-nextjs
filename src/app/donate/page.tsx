@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Heart, Loader2 } from 'lucide-react';
+import { Heart, Loader2, Sparkles } from 'lucide-react';
 import Script from 'next/script';
 
 declare global {
@@ -50,7 +50,6 @@ export default function DonatePage() {
         setIsLoading(true);
 
         try {
-            // Create Razorpay order
             const response = await fetch('/api/razorpay/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -73,7 +72,6 @@ export default function DonatePage() {
                 throw new Error(data.error || 'Failed to create order');
             }
 
-            // Open Razorpay checkout
             const options = {
                 key: data.keyId,
                 amount: data.amount,
@@ -82,7 +80,6 @@ export default function DonatePage() {
                 description: formData.donationFor,
                 order_id: data.orderId,
                 handler: async function (response: any) {
-                    // Verify payment
                     try {
                         const verifyResponse = await fetch('/api/razorpay/verify', {
                             method: 'POST',
@@ -112,7 +109,7 @@ export default function DonatePage() {
                     contact: formData.mobile,
                 },
                 theme: {
-                    color: '#d97706',
+                    color: '#8B1A1A',
                 },
                 modal: {
                     ondismiss: function () {
@@ -133,22 +130,35 @@ export default function DonatePage() {
 
     if (isSuccess) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 py-16">
+            <div className="min-h-screen py-16" style={{ background: 'var(--color-bg)' }}>
                 <div className="max-w-md mx-auto px-4 text-center">
-                    <div className="bg-white rounded-2xl shadow-lg p-8">
-                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <Heart size={40} className="text-green-600" fill="currentColor" />
+                    <div
+                        className="rounded-2xl p-10"
+                        style={{
+                            background: 'var(--color-surface)',
+                            boxShadow: 'var(--shadow-xl)',
+                            borderTop: '4px solid var(--color-secondary)',
+                        }}
+                    >
+                        <div
+                            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                            style={{ background: 'linear-gradient(135deg, #FFF8E1, #FFF4D4)' }}
+                        >
+                            <Heart size={40} style={{ color: 'var(--color-primary)' }} fill="currentColor" />
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                        <h1
+                            className="text-2xl font-bold mb-2"
+                            style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-heading)' }}
+                        >
                             Thank You!
                         </h1>
-                        <p className="text-gray-600 mb-6">
-                            Your donation of ₹{formData.amount} for "{formData.donationFor}" has been received.
+                        <p className="mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+                            Your donation of ₹{formData.amount} for &ldquo;{formData.donationFor}&rdquo; has been received.
                             May Krishna bless you abundantly!
                         </p>
                         <a
                             href="/"
-                            className="inline-block px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
+                            className="btn-golden inline-flex"
                         >
                             Return Home
                         </a>
@@ -158,6 +168,18 @@ export default function DonatePage() {
         );
     }
 
+    const inputStyle = {
+        width: '100%',
+        padding: '0.75rem 1rem',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-lg)',
+        background: 'var(--color-surface)',
+        color: 'var(--color-text)',
+        fontSize: 'var(--text-sm)',
+        transition: 'border-color var(--transition-fast)',
+        outline: 'none',
+    };
+
     return (
         <>
             <Script
@@ -165,36 +187,68 @@ export default function DonatePage() {
                 strategy="lazyOnload"
             />
 
-            <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-8">
+            <div className="min-h-screen py-10" style={{ background: 'var(--color-bg)' }}>
                 <div className="max-w-2xl mx-auto px-4">
                     {/* Header */}
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-10">
                         <div className="flex justify-center mb-4">
-                            <Heart size={48} className="text-red-500" fill="currentColor" />
+                            <div
+                                className="w-16 h-16 rounded-full flex items-center justify-center"
+                                style={{
+                                    background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%)',
+                                }}
+                            >
+                                <Heart size={28} style={{ color: '#F5EDE0' }} fill="currentColor" />
+                            </div>
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                        <h1
+                            className="text-3xl font-bold mb-2"
+                            style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}
+                        >
                             Make a Donation
                         </h1>
-                        <p className="text-gray-600">
+                        <p style={{ color: 'var(--color-text-secondary)' }}>
                             Support the mission of spreading Vedic knowledge worldwide
                         </p>
                     </div>
 
                     {/* Donation Form */}
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
-                        {/* Donation Type - Fixed as General Donation */}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="rounded-2xl p-8"
+                        style={{
+                            background: 'var(--color-surface)',
+                            boxShadow: 'var(--shadow-lg)',
+                            border: '1px solid var(--color-border-light)',
+                            borderTop: '4px solid var(--color-secondary)',
+                        }}
+                    >
+                        {/* Donation Type */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label
+                                className="block text-sm font-medium mb-2"
+                                style={{ color: 'var(--color-text)' }}
+                            >
                                 Donation For
                             </label>
-                            <div className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-700">
+                            <div
+                                className="w-full p-3 rounded-lg"
+                                style={{
+                                    background: 'var(--color-surface-warm)',
+                                    border: '1px solid var(--color-border)',
+                                    color: 'var(--color-text-secondary)',
+                                }}
+                            >
                                 General Donation
                             </div>
                         </div>
 
                         {/* Amount */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label
+                                className="block text-sm font-medium mb-2"
+                                style={{ color: 'var(--color-text)' }}
+                            >
                                 Amount (₹) *
                             </label>
                             <input
@@ -205,15 +259,33 @@ export default function DonatePage() {
                                 required
                                 min="1"
                                 placeholder="Enter amount"
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                style={inputStyle}
+                                onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                             />
-                            <div className="flex gap-2 mt-2">
+                            <div className="flex gap-2 mt-3 flex-wrap">
                                 {[101, 251, 501, 1001, 2501].map(amt => (
                                     <button
                                         key={amt}
                                         type="button"
                                         onClick={() => setFormData(prev => ({ ...prev, amount: amt.toString() }))}
-                                        className="px-3 py-1 text-sm border border-gray-300 rounded-full hover:border-orange-500 hover:text-orange-600"
+                                        className="px-4 py-1.5 text-sm rounded-full font-medium cursor-pointer"
+                                        style={{
+                                            border: '1px solid var(--color-border)',
+                                            color: 'var(--color-text-secondary)',
+                                            background: 'transparent',
+                                            transition: 'all var(--transition-fast)',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--color-secondary)';
+                                            e.currentTarget.style.color = 'var(--color-primary)';
+                                            e.currentTarget.style.background = 'rgba(212, 168, 83, 0.08)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--color-border)';
+                                            e.currentTarget.style.color = 'var(--color-text-secondary)';
+                                            e.currentTarget.style.background = 'transparent';
+                                        }}
                                     >
                                         ₹{amt}
                                     </button>
@@ -224,62 +296,46 @@ export default function DonatePage() {
                         {/* Personal Details */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                                     Full Name *
                                 </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                <input type="text" name="name" value={formData.name} onChange={handleChange} required style={inputStyle}
+                                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                    onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                                     Email *
                                 </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                <input type="email" name="email" value={formData.email} onChange={handleChange} required style={inputStyle}
+                                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                    onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                                     Mobile Number *
                                 </label>
-                                <input
-                                    type="tel"
-                                    name="mobile"
-                                    value={formData.mobile}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} required style={inputStyle}
+                                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                    onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                                     PAN (for 80G receipt)
                                 </label>
-                                <input
-                                    type="text"
-                                    name="pan"
-                                    value={formData.pan}
-                                    onChange={handleChange}
-                                    placeholder="Optional"
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                <input type="text" name="pan" value={formData.pan} onChange={handleChange} placeholder="Optional" style={inputStyle}
+                                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                    onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                                 />
                             </div>
                         </div>
 
                         {/* Message */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                                 Message/Prayer (max 250 chars)
                             </label>
                             <textarea
@@ -289,7 +345,9 @@ export default function DonatePage() {
                                 maxLength={250}
                                 rows={3}
                                 placeholder="Optional message or prayer request"
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                                style={{ ...inputStyle, resize: 'none' as const }}
+                                onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
+                                onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                             />
                         </div>
 
@@ -297,7 +355,12 @@ export default function DonatePage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="btn-golden w-full justify-center text-lg cursor-pointer"
+                            style={{
+                                padding: '1rem',
+                                opacity: isLoading ? 0.6 : 1,
+                                cursor: isLoading ? 'not-allowed' : 'pointer',
+                            }}
                         >
                             {isLoading ? (
                                 <>
@@ -309,7 +372,7 @@ export default function DonatePage() {
                             )}
                         </button>
 
-                        <p className="text-center text-sm text-gray-500 mt-4">
+                        <p className="text-center text-sm mt-4" style={{ color: 'var(--color-text-muted)' }}>
                             Secure payment powered by Razorpay
                         </p>
                     </form>

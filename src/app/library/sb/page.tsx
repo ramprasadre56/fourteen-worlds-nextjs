@@ -1,56 +1,68 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { SB_VOLUMES } from '@/data/sb-cantos';
+import { SB_CANTOS } from '@/data/sb-cantos';
 
 export default function SrimadBhagavatamPage() {
     return (
-        <div className="min-h-screen bg-[#F5E6C8] py-12">
-            <div className="w-full px-8">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                        Śrīmad-Bhāgavatam
-                    </h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        The beautiful story of the Supreme Lord and His devotees.
-                        The cream of all Vedic literature.
-                    </p>
-                    <p className="text-sm text-gray-500 mt-2">
-                        Translation and Commentary by His Divine Grace A.C. Bhaktivedanta Swami Prabhupāda
-                    </p>
-                </div>
+        <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
 
-                {/* Book Cover Cards Grid */}
-                <div className="flex flex-wrap justify-center gap-6">
-                    {SB_VOLUMES.map((volume) => (
+                {/* Breadcrumb */}
+                <nav style={{ marginBottom: '1.5rem', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/library" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Library
+                    </Link>
+                </nav>
+
+                {/* Title */}
+                <h1 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                    fontWeight: 700,
+                    color: 'var(--color-primary)',
+                    marginBottom: '2rem',
+                    textAlign: 'center',
+                }}>
+                    Śrīmad-Bhāgavatam
+                </h1>
+
+                {/* Canto List — Vedabase style */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    {SB_CANTOS.map((canto) => (
                         <Link
-                            key={volume.id}
-                            href={volume.href}
-                            className="group bg-white rounded-xl p-4 shadow-md hover:shadow-xl transition-all duration-300"
+                            key={canto.number}
+                            href={`/library/sb/${canto.number}`}
+                            style={{
+                                display: 'block',
+                                padding: '0.75rem 0',
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                textDecoration: 'none',
+                                lineHeight: 1.5,
+                            }}
                         >
-                            <div className="relative w-[160px] h-[210px] md:w-[180px] md:h-[240px] lg:w-[200px] lg:h-[270px] rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
-                                <Image
-                                    src={volume.coverImage}
-                                    alt={volume.displayName}
-                                    fill
-                                    quality={100}
-                                    sizes="200px"
-                                    className="object-cover"
-                                    unoptimized
-                                />
-                            </div>
-                            <p className="mt-3 text-center text-sm font-medium text-gray-800 max-w-[200px]">
-                                {volume.displayName}
-                            </p>
+                            Canto {canto.number}: {canto.title}
                         </Link>
                     ))}
                 </div>
 
                 {/* Back link */}
-                <div className="mt-12 text-center">
+                <div style={{
+                    marginTop: '3rem',
+                    paddingTop: '1.5rem',
+                    borderTop: '2px solid var(--color-secondary)',
+                    textAlign: 'center',
+                }}>
                     <Link
                         href="/library"
-                        className="text-amber-700 hover:text-amber-900 hover:underline font-medium"
+                        style={{
+                            color: 'var(--color-primary)',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 600,
+                            fontSize: 'var(--text-sm)',
+                            textDecoration: 'none',
+                        }}
                     >
                         ← Back to Library
                     </Link>

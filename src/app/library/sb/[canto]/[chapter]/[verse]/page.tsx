@@ -14,7 +14,6 @@ async function loadSBVerseContent(canto: number, chapter: number, verse: number)
         const data = await fs.readFile(filePath, 'utf-8');
         const versesData = JSON.parse(data);
 
-        // The JSON is keyed by "canto-chapter-verse" format like "1-1-1", "1-2-3", etc.
         const verseKey = `${canto}-${chapter}-${verse}`;
         const verseData = versesData[verseKey];
 
@@ -23,7 +22,6 @@ async function loadSBVerseContent(canto: number, chapter: number, verse: number)
             return null;
         }
 
-        // Handle array fields
         const devanagari = Array.isArray(verseData.sanskrit_devanagari)
             ? verseData.sanskrit_devanagari.join('\n')
             : (verseData.sanskrit_devanagari || verseData.devanagari || '');
@@ -60,19 +58,16 @@ export default async function SBVersePage({ params }: PageProps) {
         notFound();
     }
 
-    // Load verse content from JSON files
     const verseContent = await loadSBVerseContent(cantoNum, chapterNum, verseNum);
 
-    // Fallback if verse not found
     const content = verseContent || {
-        devanagari: 'ॐ नमो भगवते वासुदेवाय',
-        transliteration: 'oṁ namo bhagavate vāsudevāya',
-        synonyms: 'oṁ — O my Lord; namaḥ — my respectful obeisances; bhagavate — unto the Personality of Godhead; vāsudevāya — unto Lord Kṛṣṇa, the son of Vasudeva.',
-        translation: 'O my Lord, the all-pervading Personality of Godhead, I offer my respectful obeisances unto You.',
-        purport: 'Vāsudeva, or Lord Śrī Kṛṣṇa, the son of Vasudeva, is the Supreme Personality of Godhead.',
+        devanagari: '',
+        transliteration: '',
+        synonyms: '',
+        translation: 'Verse content loading...',
+        purport: '',
     };
 
-    // Calculate prev/next verses
     const prevVerse = verseNum > 1
         ? { canto: cantoNum, chapter: chapterNum, verse: verseNum - 1 }
         : null;
@@ -80,106 +75,198 @@ export default async function SBVersePage({ params }: PageProps) {
     const nextVerse = { canto: cantoNum, chapter: chapterNum, verse: verseNum + 1 };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="w-full px-8">
+        <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+
                 {/* Breadcrumb */}
-                <nav className="text-sm mb-6">
-                    <Link href="/library" className="text-gray-500 hover:underline">Library</Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <Link href="/library/sb" className="text-gray-500 hover:underline">Śrīmad-Bhāgavatam</Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <Link href={`/library/sb/${cantoNum}`} className="text-gray-500 hover:underline">
+                <nav style={{ marginBottom: '1.5rem', fontSize: 'var(--text-sm)' }}>
+                    <Link href="/library" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Library
+                    </Link>
+                    <span style={{ margin: '0 0.5rem', color: 'var(--color-border)' }}>»</span>
+                    <Link href="/library/sb" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                        Śrīmad-Bhāgavatam
+                    </Link>
+                    <span style={{ margin: '0 0.5rem', color: 'var(--color-border)' }}>»</span>
+                    <Link href={`/library/sb/${cantoNum}`} style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
                         Canto {cantoNum}
                     </Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <Link href={`/library/sb/${cantoNum}/${chapterNum}`} className="text-gray-500 hover:underline">
+                    <span style={{ margin: '0 0.5rem', color: 'var(--color-border)' }}>»</span>
+                    <Link href={`/library/sb/${cantoNum}/${chapterNum}`} style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
                         Chapter {chapterNum}
                     </Link>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <span className="text-gray-800">Verse {verseNum}</span>
                 </nav>
 
-                {/* Verse Header */}
-                <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-xl p-6 mb-6 text-white">
-                    <p className="text-sm opacity-80 mb-1">Śrīmad-Bhāgavatam</p>
-                    <h1 className="text-2xl font-bold">SB {cantoNum}.{chapterNum}.{verseNum}</h1>
-                    <p className="opacity-80 mt-1">{canto.title}</p>
-                </div>
+                {/* Verse Title */}
+                <h1 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'var(--text-4xl)',
+                    fontWeight: 700,
+                    color: 'var(--color-primary)',
+                    marginBottom: '2rem',
+                    paddingBottom: '1rem',
+                    borderBottom: '2px solid var(--color-secondary)',
+                }}>
+                    SB {cantoNum}.{chapterNum}.{verseNum}
+                </h1>
 
-                {/* Verse Content */}
-                <div className="space-y-6">
+                {/* Verse Sections */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
                     {/* Devanagari */}
                     {content.devanagari && (
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                                Devanagari
+                        <section>
+                            <h2 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                marginBottom: '0.75rem',
+                                paddingBottom: '0.5rem',
+                                borderBottom: '1px solid var(--color-border-light)',
+                            }}>
+                                Devanāgarī
                             </h2>
-                            <p
-                                className="text-xl leading-loose"
-                                style={{ fontFamily: "'Noto Sans Devanagari', sans-serif", color: '#4A5568' }}
-                            >
+                            <p style={{
+                                fontSize: '1.25rem',
+                                lineHeight: 2,
+                                whiteSpace: 'pre-line',
+                                fontFamily: "'Noto Sans Devanagari', sans-serif",
+                                color: 'var(--color-primary)',
+                            }}>
                                 {content.devanagari}
                             </p>
-                        </div>
+                        </section>
                     )}
 
-                    {/* Transliteration */}
+                    {/* Verse Text / Transliteration */}
                     {content.transliteration && (
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                                Transliteration
+                        <section>
+                            <h2 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                marginBottom: '0.75rem',
+                                paddingBottom: '0.5rem',
+                                borderBottom: '1px solid var(--color-border-light)',
+                            }}>
+                                Text
                             </h2>
-                            <p className="text-lg italic text-gray-700 leading-relaxed">
+                            <p style={{
+                                fontSize: 'var(--text-lg)',
+                                fontStyle: 'italic',
+                                lineHeight: 1.9,
+                                whiteSpace: 'pre-line',
+                                color: 'var(--color-text-secondary)',
+                            }}>
                                 {content.transliteration}
                             </p>
-                        </div>
+                        </section>
                     )}
 
                     {/* Synonyms */}
                     {content.synonyms && (
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        <section>
+                            <h2 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                marginBottom: '0.75rem',
+                                paddingBottom: '0.5rem',
+                                borderBottom: '1px solid var(--color-border-light)',
+                            }}>
                                 Synonyms
                             </h2>
-                            <p className="text-gray-700 leading-relaxed">{content.synonyms}</p>
-                        </div>
+                            <p style={{
+                                fontSize: 'var(--text-base)',
+                                lineHeight: 1.8,
+                                color: 'var(--color-text-secondary)',
+                            }}>
+                                {content.synonyms}
+                            </p>
+                        </section>
                     )}
 
                     {/* Translation */}
                     {content.translation && (
-                        <div className="bg-blue-50 rounded-xl shadow-sm p-6 border border-blue-100">
-                            <h2 className="text-sm font-semibold text-blue-800 uppercase tracking-wider mb-3">
+                        <section>
+                            <h2 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                marginBottom: '0.75rem',
+                                paddingBottom: '0.5rem',
+                                borderBottom: '1px solid var(--color-border-light)',
+                            }}>
                                 Translation
                             </h2>
-                            <p className="text-lg text-gray-800 leading-relaxed font-medium">
+                            <p style={{
+                                fontSize: 'var(--text-lg)',
+                                lineHeight: 1.8,
+                                fontWeight: 500,
+                                color: 'var(--color-text)',
+                            }}>
                                 {content.translation}
                             </p>
-                        </div>
+                        </section>
                     )}
 
                     {/* Purport */}
                     {content.purport && (
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        <section>
+                            <h2 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'var(--text-xl)',
+                                fontWeight: 600,
+                                color: 'var(--color-primary)',
+                                marginBottom: '0.75rem',
+                                paddingBottom: '0.5rem',
+                                borderBottom: '1px solid var(--color-border-light)',
+                            }}>
                                 Purport
                             </h2>
                             <div
-                                className="text-gray-700 leading-relaxed prose prose-sm max-w-none"
+                                style={{
+                                    fontSize: 'var(--text-base)',
+                                    lineHeight: 1.8,
+                                    color: 'var(--color-text-secondary)',
+                                }}
                                 dangerouslySetInnerHTML={{ __html: content.purport.replace(/\n/g, '<br/>') }}
                             />
-                        </div>
+                        </section>
                     )}
                 </div>
 
-                {/* Navigation */}
-                <div className="flex justify-between items-center mt-8 py-4 border-t border-gray-200">
+                {/* Bottom Navigation */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: '3rem',
+                    paddingTop: '1.5rem',
+                    borderTop: '2px solid var(--color-secondary)',
+                }}>
                     {prevVerse ? (
                         <Link
                             href={`/library/sb/${prevVerse.canto}/${prevVerse.chapter}/${prevVerse.verse}`}
-                            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.625rem 1.25rem',
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius-lg)',
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-sm)',
+                                fontWeight: 500,
+                                textDecoration: 'none',
+                            }}
                         >
-                            <span className="text-gray-400">←</span>
-                            <span className="text-gray-700">SB {prevVerse.canto}.{prevVerse.chapter}.{prevVerse.verse}</span>
+                            ← SB {prevVerse.canto}.{prevVerse.chapter}.{prevVerse.verse}
                         </Link>
                     ) : (
                         <div />
@@ -187,17 +274,35 @@ export default async function SBVersePage({ params }: PageProps) {
 
                     <Link
                         href={`/library/sb/${cantoNum}/${chapterNum}`}
-                        className="px-4 py-2 text-purple-600 hover:underline"
+                        style={{
+                            padding: '0.625rem 1.25rem',
+                            color: 'var(--color-primary)',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: 600,
+                            fontSize: 'var(--text-sm)',
+                            textDecoration: 'none',
+                        }}
                     >
-                        All Verses
+                        Chapter {chapterNum}
                     </Link>
 
                     <Link
                         href={`/library/sb/${nextVerse.canto}/${nextVerse.chapter}/${nextVerse.verse}`}
-                        className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.625rem 1.25rem',
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: 'var(--radius-lg)',
+                            color: 'var(--color-text-secondary)',
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 500,
+                            textDecoration: 'none',
+                        }}
                     >
-                        <span className="text-gray-700">SB {nextVerse.canto}.{nextVerse.chapter}.{nextVerse.verse}</span>
-                        <span className="text-gray-400">→</span>
+                        SB {nextVerse.canto}.{nextVerse.chapter}.{nextVerse.verse} →
                     </Link>
                 </div>
             </div>

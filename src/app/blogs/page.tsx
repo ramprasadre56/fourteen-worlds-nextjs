@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { RefreshCw, Wifi, Database } from 'lucide-react';
+import { RefreshCw, Wifi, Database, BookOpen } from 'lucide-react';
 
 interface Blog {
     title: string;
@@ -56,11 +56,11 @@ export default function BlogsPage() {
     const getSourceLabel = () => {
         switch (dataSource) {
             case 'live':
-                return { icon: Wifi, text: 'Live', color: 'text-green-600 bg-green-50 border-green-200' };
+                return { icon: Wifi, text: 'Live', bgColor: 'rgba(212, 168, 83, 0.1)', borderColor: 'rgba(212, 168, 83, 0.3)', textColor: 'var(--color-secondary-dark)' };
             case 'cache':
-                return { icon: Database, text: 'Cached', color: 'text-blue-600 bg-blue-50 border-blue-200' };
+                return { icon: Database, text: 'Cached', bgColor: 'rgba(107, 66, 38, 0.08)', borderColor: 'rgba(107, 66, 38, 0.2)', textColor: 'var(--color-accent)' };
             case 'static-fallback':
-                return { icon: Database, text: 'Cached', color: 'text-gray-600 bg-gray-100 border-gray-200' };
+                return { icon: Database, text: 'Cached', bgColor: 'rgba(0,0,0,0.04)', borderColor: 'var(--color-border)', textColor: 'var(--color-text-muted)' };
             default:
                 return null;
         }
@@ -69,23 +69,39 @@ export default function BlogsPage() {
     const sourceInfo = getSourceLabel();
 
     return (
-        <div className="min-h-screen bg-[#F5F5F5]">
+        <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
             {/* Sticky Header */}
-            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-4 px-8">
-                <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
+            <div
+                className="sticky top-0 z-10 py-5 px-8"
+                style={{
+                    background: 'rgba(253, 248, 240, 0.92)',
+                    backdropFilter: 'blur(12px)',
+                    borderBottom: '1px solid var(--color-border-light)',
+                }}
+            >
+                <div className="flex items-center justify-between max-w-[1440px] mx-auto">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">
+                        <h1
+                            className="text-2xl font-bold"
+                            style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}
+                        >
                             ISKCON Blogs
                         </h1>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
                             Latest spiritual insights from ISKCON Desire Tree
                         </p>
                     </div>
 
-                    {/* Data Source & Refresh */}
                     <div className="flex items-center gap-2">
                         {sourceInfo && (
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border ${sourceInfo.color}`}>
+                            <span
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
+                                style={{
+                                    background: sourceInfo.bgColor,
+                                    border: `1px solid ${sourceInfo.borderColor}`,
+                                    color: sourceInfo.textColor,
+                                }}
+                            >
                                 <sourceInfo.icon size={14} />
                                 {sourceInfo.text}
                             </span>
@@ -93,7 +109,11 @@ export default function BlogsPage() {
                         <button
                             onClick={() => fetchBlogs(true)}
                             disabled={isRefreshing}
-                            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
+                            className="btn-golden text-sm cursor-pointer"
+                            style={{
+                                padding: '0.4rem 1rem',
+                                opacity: isRefreshing ? 0.6 : 1,
+                            }}
                         >
                             <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
                             {isRefreshing ? 'Loading...' : 'Refresh'}
@@ -103,17 +123,17 @@ export default function BlogsPage() {
             </div>
 
             {/* Content */}
-            <div className="px-6 py-8">
+            <div className="px-8 py-10 max-w-[1440px] mx-auto">
                 {/* Loading State */}
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-20">
-                        <RefreshCw size={40} className="animate-spin text-red-500 mb-4" />
-                        <p className="text-gray-600 font-medium">Fetching latest blogs...</p>
-                        <p className="text-sm text-gray-400 mt-1">This may take a moment</p>
+                        <RefreshCw size={40} className="animate-spin mb-4" style={{ color: 'var(--color-primary)' }} />
+                        <p className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>Fetching latest blogs...</p>
+                        <p className="text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>This may take a moment</p>
                     </div>
                 ) : (
                     /* Blog Cards Grid */
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-w-screen-2xl mx-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 stagger-children">
                         {blogs.map((blog, index) => (
                             <Link
                                 key={`${blog.url}-${index}`}
@@ -122,9 +142,25 @@ export default function BlogsPage() {
                                 rel="noopener noreferrer"
                                 className="block"
                             >
-                                <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer h-full">
+                                <article
+                                    className="rounded-xl overflow-hidden group cursor-pointer h-full"
+                                    style={{
+                                        background: 'var(--color-surface)',
+                                        border: '1px solid var(--color-border-light)',
+                                        boxShadow: 'var(--shadow-sm)',
+                                        transition: 'all var(--transition-base)',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+                                        e.currentTarget.style.transform = 'translateY(-3px)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                    }}
+                                >
                                     {/* Thumbnail */}
-                                    <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+                                    <div className="relative w-full aspect-[4/3] overflow-hidden" style={{ background: 'var(--color-surface-warm)' }}>
                                         {blog.thumbnail ? (
                                             // eslint-disable-next-line @next/next/no-img-element
                                             <img
@@ -137,20 +173,33 @@ export default function BlogsPage() {
                                                 }}
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-red-100">
-                                                <span className="text-4xl">📖</span>
+                                            <div
+                                                className="w-full h-full flex items-center justify-center"
+                                                style={{
+                                                    background: 'linear-gradient(135deg, #FFF8E1, #FFF4D4)',
+                                                }}
+                                            >
+                                                <BookOpen size={36} style={{ color: 'var(--color-secondary)' }} />
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Content */}
                                     <div className="p-5">
-                                        {/* Date */}
-                                        <p className="text-sm text-gray-500 mb-3 font-medium tracking-wide">
+                                        <p
+                                            className="text-sm mb-3 font-medium tracking-wide"
+                                            style={{ color: 'var(--color-text-muted)' }}
+                                        >
                                             {blog.date}
                                         </p>
-                                        {/* Title */}
-                                        <h3 className="text-base font-semibold text-gray-800 leading-relaxed group-hover:text-red-600 transition-colors line-clamp-3">
+                                        <h3
+                                            className="text-base font-semibold leading-relaxed line-clamp-3"
+                                            style={{
+                                                color: 'var(--color-text)',
+                                                fontFamily: 'var(--font-heading)',
+                                                transition: 'color var(--transition-fast)',
+                                            }}
+                                        >
                                             {blog.title}
                                         </h3>
                                     </div>
@@ -163,10 +212,10 @@ export default function BlogsPage() {
                 {/* Empty State */}
                 {!isLoading && blogs.length === 0 && (
                     <div className="text-center py-20">
-                        <p className="text-gray-500 mb-4">No blogs found.</p>
+                        <p className="mb-4" style={{ color: 'var(--color-text-muted)' }}>No blogs found.</p>
                         <button
                             onClick={() => fetchBlogs(true)}
-                            className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-medium"
+                            className="btn-golden cursor-pointer"
                         >
                             Try Again
                         </button>
@@ -175,14 +224,20 @@ export default function BlogsPage() {
             </div>
 
             {/* Footer Attribution */}
-            <div className="text-center py-8 text-sm text-gray-400 border-t border-gray-100">
+            <div
+                className="text-center py-8 text-sm"
+                style={{
+                    color: 'var(--color-text-muted)',
+                    borderTop: '1px solid var(--color-border-light)',
+                }}
+            >
                 <p>
                     Blogs sourced from{' '}
                     <a
                         href="https://iskcondesiretree.com/profiles/blogs"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-red-500 hover:underline"
+                        style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}
                     >
                         ISKCON Desire Tree
                     </a>
