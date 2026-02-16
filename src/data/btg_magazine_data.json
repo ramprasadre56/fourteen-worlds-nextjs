@@ -1,5 +1,115 @@
 [
   {
+    "issue": "February 2026",
+    "cover_image": "/btg_magazine_images/february_2026/cover6eng.png",
+    "articles": [
+      {
+        "id": "feb_2026_1",
+        "title": "The Real Religion of the Living Entity",
+        "author": "His Divine Grace A. C. Bhaktivedanta Swami Prabhupada",
+        "reading_time": "8 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/cover6eng.png",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-real-religion-of-the-living-entity.html",
+        "description": "What Lord Krishna descends to teach is beyond the ordinary sense of the word \"religion.\"",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-real-religion-of-the-living-entity/"
+      },
+      {
+        "id": "feb_2026_2",
+        "title": "Pilgrimage Sites or Picnic Spots?",
+        "author": "Prabhupada Ashraya Dasa",
+        "reading_time": "4 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Table.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/pilgrimage-sites-or-picnic-spots.html",
+        "description": "Reclaiming sacred spaces from the grip of material consciousness.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/pilgrimage-sites-or-picnic-spots/"
+      },
+      {
+        "id": "feb_2026_3",
+        "title": "Reviving Sri Caitanya Mahaprabhu\u2019s Message Through Bengali Literature",
+        "author": "Dr. Sumanta Rudra and Kulavati Krishnapriya Devi Dasi",
+        "reading_time": "4 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Bengali-Online-Course.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/reviving-sri-caitanya-mahaprabhusmessage-through-bengali-literature.html",
+        "description": "A new gateway opens for the world to enter the original Bengali literary heritage of the Gaudiya sampradaya.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/reviving-sri-caitanya-mahaprabhusmessage-through-bengali-literature/"
+      },
+      {
+        "id": "feb_2026_4",
+        "title": "The Secret of Happiness in Krishna Consciousness",
+        "author": "Vraja Bihari Dasa",
+        "reading_time": "6 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Prahalad-Narshima.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-secret-of-happiness-in-krishna-consciousness.html",
+        "description": "It lies in a very simple devotional principle that most people miss.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-secret-of-happiness-in-krishna-consciousness/"
+      },
+      {
+        "id": "feb_2026_5",
+        "title": "Ramayana\u2019s ART of Resilience",
+        "author": "Caitanya Carana Dasa",
+        "reading_time": "7 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Laxman-getting-angry-at-Kaikeyi.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/ramayanas-art-of-resilience.html",
+        "description": "Insights from the Ramayana that can help us navigate modern adversity.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/ramayanas-art-of-resilience/"
+      },
+      {
+        "id": "feb_2026_6",
+        "title": "Where Is Your Freedom?",
+        "author": "His Divine Grace A. C. Bhaktivedanta Swami Prabhupada",
+        "reading_time": "4 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/cover6eng.png",
+        "category": "Magazine",
+        "path": "/btg_articles_content/where-is-your-freedom.html",
+        "description": "A conversation between Srila Prabhupada and his disciples at ISKCON's farming village in New Vrindaban.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/where-is-your-freedom/"
+      },
+      {
+        "id": "feb_2026_7",
+        "title": "Have you abandoned your New Year Resolution(s)?",
+        "author": "Syamananda Dasa",
+        "reading_time": "3 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Editorial.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/have-you-abandoned-your-new-year-resolutions.html",
+        "description": "Practical ways to build stamina and tenacity, with lessons from the Ramayana and Mahabharata.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/have-you-abandoned-your-new-year-resolutions/"
+      },
+      {
+        "id": "feb_2026_8",
+        "title": "The Awakening",
+        "author": "Akshobhya Tirtha Dasa",
+        "reading_time": "6 mins",
+        "date": "February 2026",
+        "image": "/btg_magazine_images/february_2026/Layer-1.jpg",
+        "category": "Magazine",
+        "path": "/btg_articles_content/the-awakening.html",
+        "description": "Rediscovering meaning through spiritual learning \u2013 how bhakti-yoga gave education its meaning back.",
+        "is_premium": true,
+        "url": "https://btgindia.com/magazine/the-awakening-2/"
+      }
+    ]
+  },
+  {
     "issue": "January 2026",
     "cover_image": "/btg_magazine_images/january_2026/C1-cover.jpg",
     "articles": [

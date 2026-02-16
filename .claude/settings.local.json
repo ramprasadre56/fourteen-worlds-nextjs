@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:btgindia.com)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__navigate_page"
+    ]
+  }
+}
