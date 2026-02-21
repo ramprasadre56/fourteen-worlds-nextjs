@@ -10,8 +10,21 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+// Initialize Firebase only if we have the config or are in the browser
+let app;
+let auth;
+let googleProvider;
+
+try {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    
+    // Only initialize auth if we are actually in the browser OR we have an API key
+    if (typeof window !== 'undefined' || process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        auth = getAuth(app);
+        googleProvider = new GoogleAuthProvider();
+    }
+} catch (error) {
+    console.error('Firebase initialization error', error);
+}
 
 export { app, auth, googleProvider };

@@ -28,6 +28,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!auth) {
+            setLoading(false);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
@@ -37,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const signInWithGoogle = async () => {
+        if (!auth || !googleProvider) throw new Error("Firebase Auth is not initialized.");
         try {
             await signInWithPopup(auth, googleProvider);
         } catch (error) {
@@ -46,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const sendMagicLink = async (email: string, redirectUrl: string) => {
+        if (!auth) throw new Error("Firebase Auth is not initialized.");
         try {
             await sendSignInLinkToEmail(auth, email, {
                 url: redirectUrl,
@@ -58,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const verifyMagicLink = async (email: string, href: string) => {
+        if (!auth) throw new Error("Firebase Auth is not initialized.");
         try {
             if (isSignInWithEmailLink(auth, href)) {
                 await signInWithEmailLink(auth, email, href);
@@ -71,6 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
+        if (!auth) return;
         try {
             await firebaseSignOut(auth);
         } catch (error) {
