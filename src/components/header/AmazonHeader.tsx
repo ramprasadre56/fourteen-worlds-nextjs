@@ -42,7 +42,7 @@ export function AmazonHeader() {
                         <img
                             src="/fourteen-worlds-logo.png"
                             alt="Fourteen Worlds"
-                            className="h-10 w-auto rounded-lg"
+                            className="h-14 w-auto rounded-lg"
                             style={{
                                 border: '2px solid rgba(212, 168, 83, 0.4)',
                                 transition: 'border-color var(--transition-base)',
