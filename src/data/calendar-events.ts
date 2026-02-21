@@ -178,9 +178,92 @@ export const CALENDAR_EVENTS: Record<string, MonthData> = {
             },
         ],
     },
+    feb_2026: {
+        label: "February 2026",
+        events: [
+            {
+                date: "Feb 1",
+                event: "Sri Krishna Madhura Utsava",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/sri-krishna-madhura-utsava-2026/",
+            },
+            {
+                date: "Feb 1",
+                event: "Appearance Day of Srila Narottama Dasa Thakura",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/appearance-day-of-srila-narottama-dasa-thakura-2026/",
+            },
+            {
+                date: "Feb 6",
+                event: "Appearance Day of Srila Bhaktisiddhanta Sarasvati Thakura",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/appearance-day-of-srila-bhaktisiddhanta-sarasvati-thakura-2026/",
+            },
+            {
+                date: "Feb 6",
+                event: "Disappearance Day of Sri Purusottama Dasa Thakura",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-day-of-sri-purusottama-dasa-thakura-2026/",
+            },
+            {
+                date: "Feb 6",
+                event: "Disappearance Day of Srila Gour Govinda Swami",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-day-of-srila-gour-govinda-swami-2026/",
+            },
+            {
+                date: "Feb 13",
+                event: "Vijaya Ekadashi",
+                highlight: true,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/vijaya-ekadashi-2026/",
+            },
+            {
+                date: "Feb 14",
+                event: "Disappearance Day of Sri Isvara Puri",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-day-of-sri-isvara-puri-2026/",
+            },
+            {
+                date: "Feb 16",
+                event: "Siva Ratri",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/siva-ratri-2026/",
+            },
+            {
+                date: "Feb 18",
+                event: "Disappearance Day of Srila Jagannatha Dasa Babaji",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-day-of-srila-jagannatha-dasa-babaji-2026/",
+            },
+            {
+                date: "Feb 18",
+                event: "Disappearance Day of Sri Rasikananda",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-day-of-sri-rasikananda-2026/",
+            },
+            {
+                date: "Feb 21",
+                event: "Appearance Day of Sri Purusottama Dasa Thakura",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/appearance-day-of-sri-purusottama-dasa-thakura-2026/",
+            },
+            {
+                date: "Feb 27",
+                event: "Amalaki Vrata Ekadashi",
+                highlight: true,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/amalaki-vrata-ekadashi-2026/",
+            },
+            {
+                date: "Feb 28",
+                event: "Disappearance of Sri Madhavendra Puri",
+                highlight: false,
+                url: "http://harekrishnacalendar.com/vaishnava-calendar/disappearance-of-sri-madhavendra-puri-2026/",
+            },
+        ],
+    },
 };
 
-export const MONTH_KEYS = ["nov_2025", "dec_2025", "jan_2026"];
+export const MONTH_KEYS = ["nov_2025", "dec_2025", "jan_2026", "feb_2026"];
 
 export function getMonthByOffset(offset: number): MonthData {
     // Default to dec_2025 (index 1), then add offset

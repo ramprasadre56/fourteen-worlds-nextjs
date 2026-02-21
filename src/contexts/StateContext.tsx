@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { World, getWorldById } from '@/data/worlds';
+
 
 interface AppState {
     // World selection
@@ -90,8 +90,8 @@ export function StateProvider({ children }: { children: ReactNode }) {
 
         // Calendar navigation
         calendarMonthOffset,
-        prevCalendarMonth: () => setCalendarMonthOffset(prev => Math.max(prev - 1, -1)),
-        nextCalendarMonth: () => setCalendarMonthOffset(prev => Math.min(prev + 1, 1)),
+        prevCalendarMonth: () => setCalendarMonthOffset(prev => prev - 1),
+        nextCalendarMonth: () => setCalendarMonthOffset(prev => prev + 1),
         resetCalendarMonth: () => setCalendarMonthOffset(0),
 
         // Flipbook viewer

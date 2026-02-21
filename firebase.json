@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Fourteen Worlds",
+        "supportEmail": "ramprasadre56@gmail.com"
+      }
+    }
+  }
+}

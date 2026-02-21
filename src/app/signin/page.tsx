@@ -1,10 +1,79 @@
 'use client';
 
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
-import { Chrome, Github, Sparkles } from 'lucide-react';
+import { Chrome, Sparkles } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { isSignInWithEmailLink } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function SignInPage() {
+    const { user, signInWithGoogle, sendMagicLink, verifyMagicLink } = useAuth();
+    const router = useRouter();
+
+    const [email, setEmail] = useState('');
+    const [magicLinkStatus, setMagicLinkStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
+
+    // Handle Auth redirect if already signed in
+    useEffect(() => {
+        if (user) {
+            router.push('/');
+        }
+    }, [user, router]);
+
+    // Handle incoming Magic Link authentication
+    useEffect(() => {
+        const verifyLink = async () => {
+            if (isSignInWithEmailLink(auth, window.location.href)) {
+                let emailForSignIn = window.localStorage.getItem('emailForSignIn');
+                if (!emailForSignIn) {
+                    // User opened the link on a different device. Provide an opportunity to get their email.
+                    emailForSignIn = window.prompt('Please provide your email for confirmation');
+                }
+
+                if (emailForSignIn) {
+                    setMagicLinkStatus({ type: 'loading', message: 'Verifying your link...' });
+                    try {
+                        await verifyMagicLink(emailForSignIn, window.location.href);
+                        window.localStorage.removeItem('emailForSignIn');
+                        // Auth state observer will redirect to '/' when user is set
+                    } catch (error: unknown) {
+                        console.error('Error signing in with magic link', error);
+                        const errorMessage = error instanceof Error ? error.message : 'The link is invalid or has expired.';
+                        setMagicLinkStatus({ type: 'error', message: errorMessage });
+                    }
+                }
+            }
+        };
+
+        verifyLink();
+    }, [verifyMagicLink]);
+
+    const handleGoogleSignIn = async () => {
+        try {
+            await signInWithGoogle();
+        } catch (error) {
+            console.error('Failed to sign in', error);
+        }
+    };
+
+    const handleSendMagicLink = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setMagicLinkStatus({ type: 'loading', message: 'Sending link...' });
+        try {
+            await sendMagicLink(email, window.location.href);
+            window.localStorage.setItem('emailForSignIn', email);
+            setMagicLinkStatus({ type: 'success', message: 'Check your email for the sign-in link!' });
+        } catch (error: unknown) {
+            console.error('Failed to send magic link', error);
+            const errorMessage = error instanceof Error ? error.message : 'Failed to send magic link. Please try again.';
+            setMagicLinkStatus({ type: 'error', message: errorMessage });
+        }
+    };
+
     return (
         <div
             className="min-h-[80vh] flex items-center justify-center"
@@ -41,7 +110,7 @@ export default function SignInPage() {
                     {/* OAuth Buttons */}
                     <div className="flex flex-col w-full gap-3">
                         <button
-                            onClick={() => signIn('google', { callbackUrl: '/' })}
+                            onClick={handleGoogleSignIn}
                             className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg font-medium cursor-pointer"
                             style={{
                                 background: 'var(--color-surface)',
@@ -61,25 +130,6 @@ export default function SignInPage() {
                             <Chrome size={20} style={{ color: '#4285F4' }} />
                             Continue with Google
                         </button>
-
-                        <button
-                            onClick={() => signIn('github', { callbackUrl: '/' })}
-                            className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg font-medium cursor-pointer"
-                            style={{
-                                background: 'var(--color-text)',
-                                color: '#F5EDE0',
-                                transition: 'all var(--transition-fast)',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.opacity = '0.9';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.opacity = '1';
-                            }}
-                        >
-                            <Github size={20} />
-                            Continue with GitHub
-                        </button>
                     </div>
 
                     {/* Divider */}
@@ -90,11 +140,14 @@ export default function SignInPage() {
                     </div>
 
                     {/* Email Sign In */}
-                    <div className="flex flex-col w-full gap-3">
+                    <form onSubmit={handleSendMagicLink} className="flex flex-col w-full gap-3">
                         <input
                             type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
-                            className="w-full py-3 px-4 rounded-lg"
+                            disabled={magicLinkStatus.type === 'loading' || magicLinkStatus.type === 'success'}
+                            className="w-full py-3 px-4 rounded-lg disabled:opacity-60"
                             style={{
                                 border: '1px solid var(--color-border)',
                                 background: 'var(--color-surface)',
@@ -105,11 +158,29 @@ export default function SignInPage() {
                             }}
                             onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-secondary)'; }}
                             onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
+                            required
                         />
-                        <button className="btn-golden w-full justify-center cursor-pointer">
-                            Send Magic Link
+                        <button
+                            type="submit"
+                            disabled={magicLinkStatus.type === 'loading' || magicLinkStatus.type === 'success' || !email}
+                            className="btn-golden w-full justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {magicLinkStatus.type === 'loading' && magicLinkStatus.message === 'Sending link...' ? 'Sending...' : 'Send Magic Link'}
                         </button>
-                    </div>
+
+                        {/* Status Messages */}
+                        {magicLinkStatus.message && (
+                            <div
+                                className={`text-sm text-center mt-2 p-3 rounded-lg ${
+                                    magicLinkStatus.type === 'error' ? 'bg-red-50 text-red-600 border border-red-100' :
+                                    magicLinkStatus.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' :
+                                    'text-[var(--color-text-muted)]'
+                                }`}
+                            >
+                                {magicLinkStatus.message}
+                            </div>
+                        )}
+                    </form>
 
                     {/* Footer */}
                     <p className="text-sm text-center" style={{ color: 'var(--color-text-muted)' }}>

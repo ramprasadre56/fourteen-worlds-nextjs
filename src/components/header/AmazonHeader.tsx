@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
 import { ShoppingCart, Menu, ChevronDown, Heart, X, Search } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 
 const navLinks = [
@@ -17,9 +17,9 @@ const navLinks = [
 ];
 
 export function AmazonHeader() {
-    const { data: session, status } = useSession();
+    const { user } = useAuth();
     const { cartCount } = useCart();
-    const isAuthenticated = status === 'authenticated';
+    const isAuthenticated = !!user;
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
@@ -61,7 +61,7 @@ export function AmazonHeader() {
                                 FOURTEEN WORLDS
                             </span>
                             <span
-                                className="text-[10px] font-medium tracking-[0.2em] uppercase"
+                                className="text-xs font-medium tracking-[0.2em] uppercase"
                                 style={{ color: 'rgba(212, 168, 83, 0.85)' }}
                             >
                                 Vedic Cosmology
@@ -108,8 +108,8 @@ export function AmazonHeader() {
                                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212, 168, 83, 0.12)'}
                                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             >
-                                <span className="text-[10px] font-medium" style={{ color: 'rgba(212, 168, 83, 0.8)' }}>
-                                    Hello, {session?.user?.name?.split(' ')[0] || 'User'}
+                                <span className="text-xs font-medium" style={{ color: 'rgba(212, 168, 83, 0.8)' }}>
+                                    Hello, {user?.displayName?.split(' ')[0] || 'User'}
                                 </span>
                                 <span className="flex items-center gap-1 text-sm font-semibold" style={{ color: '#F5EDE0' }}>
                                     Account <ChevronDown size={10} />
@@ -125,7 +125,7 @@ export function AmazonHeader() {
                                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212, 168, 83, 0.12)'}
                                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             >
-                                <span className="text-[10px] font-medium" style={{ color: 'rgba(212, 168, 83, 0.8)' }}>
+                                <span className="text-xs font-medium" style={{ color: 'rgba(212, 168, 83, 0.8)' }}>
                                     Hello, Sign in
                                 </span>
                                 <span className="flex items-center gap-1 text-sm font-semibold" style={{ color: '#F5EDE0' }}>
@@ -148,7 +148,7 @@ export function AmazonHeader() {
                                 <ShoppingCart size={20} style={{ color: '#F5EDE0' }} />
                                 {cartCount > 0 && (
                                     <span
-                                        className="absolute -top-2 -right-2 text-white text-[10px] font-bold rounded-full w-[18px] h-[18px] flex items-center justify-center"
+                                        className="absolute -top-2 -right-2 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
                                         style={{ backgroundColor: 'var(--color-secondary)' }}
                                     >
                                         {cartCount}

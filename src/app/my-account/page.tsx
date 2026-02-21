@@ -1,13 +1,20 @@
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { User, LogOut, Settings, CreditCard, Heart } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function MyAccountPage() {
-    const { data: session, status } = useSession();
+    const { user, loading, logout } = useAuth();
+    const router = useRouter();
 
-    if (status === 'loading') {
+    const handleSignOut = async () => {
+        await logout();
+        router.push('/');
+    };
+
+    if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <p className="text-gray-500">Loading...</p>
@@ -15,14 +22,14 @@ export default function MyAccountPage() {
         );
     }
 
-    if (!session) {
+    if (!user) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <p className="text-gray-600 mb-4">Please sign in to view your account</p>
                     <Link
                         href="/signin"
-                        className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                        className="btn-golden"
                     >
                         Sign In
                     </Link>
@@ -36,9 +43,9 @@ export default function MyAccountPage() {
             <div className="w-full px-8">
                 {/* Header */}
                 <div className="bg-white rounded-xl p-6 mb-6 flex items-center gap-4">
-                    {session.user?.image ? (
+                    {user.photoURL ? (
                         <img
-                            src={session.user.image}
+                            src={user.photoURL}
                             alt="Profile"
                             className="w-16 h-16 rounded-full"
                         />
@@ -49,17 +56,18 @@ export default function MyAccountPage() {
                     )}
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800">
-                            {session.user?.name || 'User'}
+                            {user.displayName || 'User'}
                         </h1>
-                        <p className="text-gray-500">{session.user?.email}</p>
+                        <p className="text-gray-500">{user.email}</p>
                     </div>
                     <button
-                        onClick={() => signOut({ callbackUrl: '/' })}
-                        className="ml-auto flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        onClick={handleSignOut}
+                        className="ml-auto flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
                     >
                         <LogOut size={18} />
                         Sign Out
                     </button>
+
                 </div>
 
                 {/* Account Links */}

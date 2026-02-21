@@ -64,8 +64,17 @@ function MonthView({ monthData }: { monthData: MonthData }) {
 export function VaishnavCalendar() {
     const { calendarMonthOffset, prevCalendarMonth, nextCalendarMonth } = useAppState();
 
-    const currentMonthIndex = Math.max(0, Math.min(MONTH_KEYS.length - 1, 1 + calendarMonthOffset));
-    const currentMonthData = CALENDAR_EVENTS[MONTH_KEYS[currentMonthIndex]];
+    const now = new Date();
+    const currentMonthKey = `${now.toLocaleString('default', { month: 'short' }).toLowerCase()}_${now.getFullYear()}`;
+    
+    let baseIndex = MONTH_KEYS.indexOf(currentMonthKey);
+    if (baseIndex === -1) {
+        baseIndex = MONTH_KEYS.length - 1; // Default to latest month if current is not found
+    }
+
+    const currentMonthIndex = baseIndex + calendarMonthOffset;
+    const safeIndex = Math.max(0, Math.min(MONTH_KEYS.length - 1, currentMonthIndex));
+    const currentMonthData = CALENDAR_EVENTS[MONTH_KEYS[safeIndex]];
 
     return (
         <div
@@ -103,7 +112,7 @@ export function VaishnavCalendar() {
                     <div className="flex items-center gap-1">
                         <button
                             onClick={prevCalendarMonth}
-                            disabled={calendarMonthOffset <= -1}
+                            disabled={currentMonthIndex <= 0}
                             className="p-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             style={{
                                 color: 'var(--color-primary)',
@@ -118,7 +127,7 @@ export function VaishnavCalendar() {
                         </button>
                         <button
                             onClick={nextCalendarMonth}
-                            disabled={calendarMonthOffset >= 1}
+                            disabled={currentMonthIndex >= MONTH_KEYS.length - 1}
                             className="p-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             style={{
                                 color: 'var(--color-primary)',

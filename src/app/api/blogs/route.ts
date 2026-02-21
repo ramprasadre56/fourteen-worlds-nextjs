@@ -125,14 +125,21 @@ async function fetchFreshBlogs(maxBlogs: number = 15): Promise<Blog[]> {
 
         console.log(`Found ${blogs.length} blog entries, fetching thumbnails...`);
 
-        // Fetch thumbnails in parallel (limit to first 10 to avoid timeout)
-        const thumbnailPromises = blogs.slice(0, 10).map(async (blog, i) => {
-            const thumbnail = await fetchBlogThumbnail(blog.url);
-            blogs[i].thumbnail = thumbnail;
-            console.log(`  Thumbnail ${i + 1}: ${thumbnail ? '✓' : '✗'}`);
-        });
-
-        await Promise.all(thumbnailPromises);
+        // Fetch thumbnails in chunks of 5 to avoid overwhelming the server
+        const chunkSize = 5;
+        for (let i = 0; i < blogs.length; i += chunkSize) {
+            const chunk = blogs.slice(i, i + chunkSize);
+            const thumbnailPromises = chunk.map(async (blog) => {
+                const thumbnail = await fetchBlogThumbnail(blog.url);
+                blog.thumbnail = thumbnail;
+                console.log(`  Thumbnail for ${blog.title.slice(0, 20)}...: ${thumbnail ? '✓' : '✗'}`);
+            });
+            await Promise.all(thumbnailPromises);
+            // Add a small delay between chunks
+            if (i + chunkSize < blogs.length) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
 
         return blogs;
     } catch (error) {
