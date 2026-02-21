@@ -1,13 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Sun, Globe2, Moon, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { VaishnavCalendar } from '@/components/sections/VaishnavCalendar';
 import { PrabhupadaQuotes } from '@/components/sections/PrabhupadaQuotes';
 import { QuickLinks } from '@/components/sections/QuickLinks';
-import { CompactWorlds } from '@/components/sections/CompactWorlds';
-import { LOTUS_COSMOLOGY, LOKA_TRAYA_INFO } from '@/data/worlds';
+import { BlogGrid } from '@/components/sections/BlogGrid';
 
 function HeroBanner() {
     return (
@@ -112,211 +110,6 @@ function HeroBanner() {
     );
 }
 
-function CompactLotusSection() {
-    return (
-        <div
-            className="p-6 rounded-xl animate-fade-in-up"
-            style={{
-                background: 'linear-gradient(135deg, #FFF9F2 0%, #FFF4EA 100%)',
-                border: '1px solid var(--color-border)',
-                borderLeft: '4px solid var(--color-secondary)',
-                boxShadow: 'var(--shadow-sm)',
-            }}
-        >
-            <div className="flex flex-wrap items-start gap-5 w-full">
-                <Image
-                    src="/home_page/vishnu_lotus.jpg"
-                    alt="Lotus Cosmology"
-                    width={200}
-                    height={150}
-                    className="rounded-lg object-cover"
-                    style={{ boxShadow: 'var(--shadow-md)' }}
-                />
-                <div className="flex-1 flex flex-col items-start gap-2 min-w-[200px]">
-                    <h2
-                        className="text-xl font-bold"
-                        style={{
-                            color: 'var(--color-primary)',
-                            fontFamily: 'var(--font-heading)',
-                            fontSize: 'var(--text-xl)',
-                        }}
-                    >
-                        The Lotus Flower Cosmology
-                    </h2>
-                    <p
-                        className="text-base leading-relaxed"
-                        style={{ color: 'var(--color-text-secondary)' }}
-                    >
-                        {LOTUS_COSMOLOGY.description.substring(0, 200)}...
-                    </p>
-                    <p
-                        className="text-sm italic"
-                        style={{ color: 'var(--color-text-muted)' }}
-                    >
-                        — {LOTUS_COSMOLOGY.reference}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function CompactIntroductionSection() {
-    return (
-        <div
-            className="p-6 rounded-xl mt-6"
-            style={{
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border-light)',
-                boxShadow: 'var(--shadow-sm)',
-            }}
-        >
-            <div className="flex flex-col items-center w-full gap-4">
-                <h2
-                    className="text-2xl font-bold text-center"
-                    style={{
-                        color: 'var(--color-primary)',
-                        fontFamily: 'var(--font-heading)',
-                    }}
-                >
-                    {LOKA_TRAYA_INFO.title}
-                </h2>
-                <p
-                    className="text-base text-center leading-relaxed mb-4 max-w-3xl"
-                    style={{ color: 'var(--color-text-secondary)' }}
-                >
-                    {LOKA_TRAYA_INFO.description}
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                    {/* Upper World */}
-                    <div
-                        className="p-4 rounded-xl cursor-pointer"
-                        style={{
-                            background: 'linear-gradient(135deg, #FFFBF0 0%, #FFF8E1 100%)',
-                            border: '1px solid rgba(218, 165, 32, 0.25)',
-                            transition: 'all var(--transition-base)',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 4px 16px rgba(218, 165, 32, 0.15)';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = 'none';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                    >
-                        <div className="flex items-start gap-3">
-                            <div
-                                className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
-                                style={{ background: '#DAA520' }}
-                            >
-                                <Sun size={20} style={{ color: '#FFFFFF' }} />
-                            </div>
-                            <div className="flex flex-col items-start">
-                                <span
-                                    className="font-semibold text-base"
-                                    style={{ color: '#DAA520', fontFamily: 'var(--font-heading)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.upperWorld.name}
-                                </span>
-                                <span
-                                    className="text-sm leading-relaxed mt-1"
-                                    style={{ color: 'var(--color-text-secondary)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.upperWorld.description}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Middle World */}
-                    <div
-                        className="p-4 rounded-xl cursor-pointer"
-                        style={{
-                            background: 'linear-gradient(135deg, #F5FBF0 0%, #EFF8E5 100%)',
-                            border: '1px solid rgba(107, 142, 35, 0.25)',
-                            transition: 'all var(--transition-base)',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 4px 16px rgba(107, 142, 35, 0.15)';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = 'none';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                    >
-                        <div className="flex items-start gap-3">
-                            <div
-                                className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
-                                style={{ background: '#6B8E23' }}
-                            >
-                                <Globe2 size={20} style={{ color: '#FFFFFF' }} />
-                            </div>
-                            <div className="flex flex-col items-start">
-                                <span
-                                    className="font-semibold text-base"
-                                    style={{ color: '#6B8E23', fontFamily: 'var(--font-heading)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.middleWorld.name}
-                                </span>
-                                <span
-                                    className="text-sm leading-relaxed mt-1"
-                                    style={{ color: 'var(--color-text-secondary)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.middleWorld.description}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Lower World */}
-                    <div
-                        className="p-4 rounded-xl cursor-pointer"
-                        style={{
-                            background: 'linear-gradient(135deg, #FBF5EE 0%, #F5EDE0 100%)',
-                            border: '1px solid rgba(139, 69, 19, 0.25)',
-                            transition: 'all var(--transition-base)',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 69, 19, 0.15)';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = 'none';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                    >
-                        <div className="flex items-start gap-3">
-                            <div
-                                className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
-                                style={{ background: '#8B4513' }}
-                            >
-                                <Moon size={20} style={{ color: '#FFFFFF' }} />
-                            </div>
-                            <div className="flex flex-col items-start">
-                                <span
-                                    className="font-semibold text-base"
-                                    style={{ color: '#8B4513', fontFamily: 'var(--font-heading)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.lowerWorld.name}
-                                </span>
-                                <span
-                                    className="text-sm leading-relaxed mt-1"
-                                    style={{ color: 'var(--color-text-secondary)' }}
-                                >
-                                    {LOKA_TRAYA_INFO.lowerWorld.description}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 function Footer() {
     return (
         <footer
@@ -381,12 +174,8 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8 p-8 max-w-[1440px] mx-auto w-full">
                     {/* Main Content Column */}
                     <div className="flex flex-col">
-                        <CompactLotusSection />
-                        <CompactIntroductionSection />
-                        <div className="mt-8">
-                            <QuickLinks />
-                        </div>
-                        <CompactWorlds />
+                        <QuickLinks />
+                        <BlogGrid />
                     </div>
 
                     {/* Sidebar */}
