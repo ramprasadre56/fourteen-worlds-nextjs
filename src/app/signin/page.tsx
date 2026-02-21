@@ -5,7 +5,6 @@ import { Chrome, Sparkles } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { isSignInWithEmailLink } from 'firebase/auth';
 import { getAuthInstance } from '@/lib/firebase';
 
 export default function SignInPage() {
@@ -25,8 +24,10 @@ export default function SignInPage() {
     // Handle incoming Magic Link authentication
     useEffect(() => {
         const verifyLink = async () => {
-            const auth = getAuthInstance();
-            if (auth && isSignInWithEmailLink(auth, window.location.href)) {
+            const auth = await getAuthInstance();
+            if (!auth) return;
+            const { isSignInWithEmailLink } = await import('firebase/auth');
+            if (isSignInWithEmailLink(auth, window.location.href)) {
                 let emailForSignIn = window.localStorage.getItem('emailForSignIn');
                 if (!emailForSignIn) {
                     // User opened the link on a different device. Provide an opportunity to get their email.

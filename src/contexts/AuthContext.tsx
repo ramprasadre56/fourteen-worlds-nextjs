@@ -1,15 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-    onAuthStateChanged,
-    signInWithPopup,
-    signOut as firebaseSignOut,
-    sendSignInLinkToEmail,
-    isSignInWithEmailLink,
-    signInWithEmailLink,
-    User
-} from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { getAuthInstance, getGoogleProvider } from '@/lib/firebase';
 
 interface AuthContextType {
@@ -28,24 +20,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const auth = getAuthInstance();
-        if (!auth) {
-            setLoading(false);
-            return;
-        }
+        let unsubscribe: (() => void) | undefined;
 
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
-        });
+        (async () => {
+            const auth = await getAuthInstance();
+            if (!auth) {
+                setLoading(false);
+                return;
+            }
 
-        return () => unsubscribe();
+            const { onAuthStateChanged } = await import('firebase/auth');
+            unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+                setUser(currentUser);
+                setLoading(false);
+            });
+        })();
+
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
     }, []);
 
     const signInWithGoogle = async () => {
-        const auth = getAuthInstance();
-        const provider = getGoogleProvider();
+        const auth = await getAuthInstance();
+        const provider = await getGoogleProvider();
         if (!auth || !provider) throw new Error("Firebase Auth is not initialized.");
+        const { signInWithPopup } = await import('firebase/auth');
         try {
             await signInWithPopup(auth, provider);
         } catch (error) {
@@ -55,8 +55,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const sendMagicLink = async (email: string, redirectUrl: string) => {
-        const auth = getAuthInstance();
+        const auth = await getAuthInstance();
         if (!auth) throw new Error("Firebase Auth is not initialized.");
+        const { sendSignInLinkToEmail } = await import('firebase/auth');
         try {
             await sendSignInLinkToEmail(auth, email, {
                 url: redirectUrl,
@@ -69,8 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const verifyMagicLink = async (email: string, href: string) => {
-        const auth = getAuthInstance();
+        const auth = await getAuthInstance();
         if (!auth) throw new Error("Firebase Auth is not initialized.");
+        const { isSignInWithEmailLink, signInWithEmailLink } = await import('firebase/auth');
         try {
             if (isSignInWithEmailLink(auth, href)) {
                 await signInWithEmailLink(auth, email, href);
@@ -84,10 +86,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
-        const auth = getAuthInstance();
+        const auth = await getAuthInstance();
         if (!auth) return;
+        const { signOut } = await import('firebase/auth');
         try {
-            await firebaseSignOut(auth);
+            await signOut(auth);
         } catch (error) {
             console.error('Error signing out:', error);
         }
