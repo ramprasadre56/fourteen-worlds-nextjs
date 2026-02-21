@@ -13,7 +13,6 @@ const navLinks = [
     { label: 'Media', href: '/media' },
     { label: 'Library', href: '/library' },
     { label: 'Back to Godhead', href: '/backtogodhead' },
-    { label: 'Blogs', href: '/blogs' },
 ];
 
 export function AmazonHeader() {

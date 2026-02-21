@@ -38,7 +38,7 @@ export function PrabhupadaQuotes() {
 
     return (
         <div
-            className="p-6 rounded-xl mt-6"
+            className="p-6 rounded-xl h-full"
             style={{
                 background: 'linear-gradient(180deg, #FFFDF5 0%, #FFF8E6 100%)',
                 border: '1px solid var(--color-border)',

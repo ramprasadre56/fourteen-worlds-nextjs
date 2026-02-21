@@ -171,18 +171,19 @@ export default function HomePage() {
 
             {/* Main Content */}
             <div style={{ background: 'var(--color-bg)' }}>
-                <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8 p-8 max-w-[1440px] mx-auto w-full">
-                    {/* Main Content Column */}
-                    <div className="flex flex-col">
+                <div className="w-full max-w-[1440px] mx-auto px-8 py-12 flex flex-col gap-16">
+                    <section>
                         <QuickLinks />
-                        <BlogGrid />
-                    </div>
+                    </section>
 
-                    {/* Sidebar */}
-                    <div className="flex flex-col">
+                    <section className="w-full">
+                        <BlogGrid />
+                    </section>
+
+                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <VaishnavCalendar />
                         <PrabhupadaQuotes />
-                    </div>
+                    </section>
                 </div>
             </div>
 
