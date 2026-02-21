@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isSignInWithEmailLink } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { getAuthInstance } from '@/lib/firebase';
 
 export default function SignInPage() {
     const { user, signInWithGoogle, sendMagicLink, verifyMagicLink } = useAuth();
@@ -25,7 +25,8 @@ export default function SignInPage() {
     // Handle incoming Magic Link authentication
     useEffect(() => {
         const verifyLink = async () => {
-            if (isSignInWithEmailLink(auth, window.location.href)) {
+            const auth = getAuthInstance();
+            if (auth && isSignInWithEmailLink(auth, window.location.href)) {
                 let emailForSignIn = window.localStorage.getItem('emailForSignIn');
                 if (!emailForSignIn) {
                     // User opened the link on a different device. Provide an opportunity to get their email.

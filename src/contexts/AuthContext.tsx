@@ -10,7 +10,7 @@ import {
     signInWithEmailLink,
     User
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
+import { getAuthInstance, getGoogleProvider } from '@/lib/firebase';
 
 interface AuthContextType {
     user: User | null;
@@ -28,6 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const auth = getAuthInstance();
         if (!auth) {
             setLoading(false);
             return;
@@ -42,9 +43,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const signInWithGoogle = async () => {
-        if (!auth || !googleProvider) throw new Error("Firebase Auth is not initialized.");
+        const auth = getAuthInstance();
+        const provider = getGoogleProvider();
+        if (!auth || !provider) throw new Error("Firebase Auth is not initialized.");
         try {
-            await signInWithPopup(auth, googleProvider);
+            await signInWithPopup(auth, provider);
         } catch (error) {
             console.error('Error signing in with Google:', error);
             throw error;
@@ -52,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const sendMagicLink = async (email: string, redirectUrl: string) => {
+        const auth = getAuthInstance();
         if (!auth) throw new Error("Firebase Auth is not initialized.");
         try {
             await sendSignInLinkToEmail(auth, email, {
@@ -65,6 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const verifyMagicLink = async (email: string, href: string) => {
+        const auth = getAuthInstance();
         if (!auth) throw new Error("Firebase Auth is not initialized.");
         try {
             if (isSignInWithEmailLink(auth, href)) {
@@ -79,6 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
+        const auth = getAuthInstance();
         if (!auth) return;
         try {
             await firebaseSignOut(auth);

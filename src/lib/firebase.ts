@@ -1,5 +1,5 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,21 +10,36 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Initialize Firebase only if we have the config or are in the browser
-let app;
-let auth;
-let googleProvider;
+// Lazy-initialize Firebase only on the client side to prevent SSR build crashes
+let _app: FirebaseApp | undefined;
+let _auth: Auth | undefined;
+let _googleProvider: GoogleAuthProvider | undefined;
 
-try {
-    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    
-    // Only initialize auth if we are actually in the browser OR we have an API key
-    if (typeof window !== 'undefined' || process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-        auth = getAuth(app);
-        googleProvider = new GoogleAuthProvider();
+function getFirebaseApp(): FirebaseApp | undefined {
+    if (typeof window === 'undefined') return undefined;
+    if (!_app) {
+        _app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     }
-} catch (error) {
-    console.error('Firebase initialization error', error);
+    return _app;
 }
 
-export { app, auth, googleProvider };
+function getFirebaseAuth(): Auth | undefined {
+    if (typeof window === 'undefined') return undefined;
+    if (!_auth) {
+        const app = getFirebaseApp();
+        if (app) {
+            _auth = getAuth(app);
+        }
+    }
+    return _auth;
+}
+
+function getGoogleProvider(): GoogleAuthProvider | undefined {
+    if (typeof window === 'undefined') return undefined;
+    if (!_googleProvider) {
+        _googleProvider = new GoogleAuthProvider();
+    }
+    return _googleProvider;
+}
+
+export { getFirebaseApp as getApp, getFirebaseAuth as getAuthInstance, getGoogleProvider };
