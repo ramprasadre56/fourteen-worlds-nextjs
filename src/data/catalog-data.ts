@@ -1,16 +1,15 @@
-// Courses data — Systematic Study of BG and SB by HG Pavaneswar Das
-// YouTube Channel: https://www.youtube.com/@systematicstudyofbgandsb410
+// Unified Catalog Data — Systematic Study & Media Playlists
 
-export type CourseCategory = 'bg' | 'sb' | 'supplementary';
-export type CourseLevel = 'Bhakti Śāstrī' | 'Bhakti Vaibhava' | 'Bhagavata Sevā' | 'General';
+export type CatalogCategory = 'bg' | 'sb' | 'vedic-stories' | 'topical' | 'supplementary';
+export type CatalogLevel = 'Bhakti Śāstrī' | 'Bhakti Vaibhava' | 'Bhagavata Sevā' | 'General';
 
-export interface Course {
+export interface CatalogItem {
     slug: string;
     title: string;
     subtitle: string;
     description: string;
-    category: CourseCategory;
-    level: CourseLevel;
+    category: CatalogCategory;
+    level?: CatalogLevel; // Optional for media, present for systematic courses
     videoCount: number;
     youtubePlaylistUrl: string;
     youtubePlaylistId: string;
@@ -21,26 +20,33 @@ export interface Course {
     tags: string[];
 }
 
-export interface CourseGroup {
+export interface CatalogGroup {
     id: string;
     title: string;
     titleSanskrit: string;
     description: string;
     icon: string;
-    category: CourseCategory;
-    courses: Course[];
+    category: CatalogCategory;
+    items: CatalogItem[];
 }
 
-// ─── Instructor ──────────────────────────────────────────
-export const INSTRUCTOR = {
+// ─── Instructors ──────────────────────────────────────────
+export const INSTRUCTOR_PAVANESWAR = {
     name: 'HG Pavaneswar Das',
     channel: 'Systematic Study of BG and SB',
     channelUrl: 'https://www.youtube.com/@systematicstudyofbgandsb410',
     bio: 'HG Pavaneswar Das systematically teaches Śrīla Prabhupāda\'s books — Bhagavad-gītā and Śrīmad-Bhāgavatam — with depth, clarity, and devotion.',
 };
 
-// ─── Bhagavad Gītā Courses ──────────────────────────────
-export const BG_COURSES: Course[] = [
+export const INSTRUCTOR_SAMPATI = {
+    name: 'HG Sampati Dasa',
+    channel: 'HKM Pune',
+    channelUrl: 'https://www.youtube.com/@hkmpune',
+    bio: 'HG Sampati Dasa is a senior devotee and scholar who presents Bhagavad-gītā and Śrīmad-Bhāgavatam in an engaging, accessible style through the HKM Pune channel.',
+};
+
+// ─── Bhagavad Gītā (Systematic) ──────────────────────────
+export const BG_COURSES: CatalogItem[] = [
     {
         slug: 'bg-module-1',
         title: 'Bhagavad Gītā — Module 1',
@@ -53,7 +59,7 @@ export const BG_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU1u2OysLliY5faZVOCwe4R9',
         chapterRange: '1–6',
         icon: '🕉️',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Karma Yoga', 'Sāṅkhya', 'Dhyāna'],
     },
     {
@@ -68,7 +74,7 @@ export const BG_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU3FqDoyK3s-4cC4wDph3uGK',
         chapterRange: '7–12',
         icon: '💛',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Bhakti Yoga', 'Vibhūti', 'Viśvarūpa'],
     },
     {
@@ -83,13 +89,13 @@ export const BG_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU3HypjfP_icDxsma4F51Hog',
         chapterRange: '13–18',
         icon: '🔱',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Jñāna Yoga', 'Guṇas', 'Mokṣa'],
     },
 ];
 
-// ─── Śrīmad Bhāgavatam Courses ─────────────────────────
-export const SB_COURSES: Course[] = [
+// ─── Śrīmad Bhāgavatam (Systematic) ──────────────────────
+export const SB_COURSES: CatalogItem[] = [
     {
         slug: 'sb-canto-1',
         title: 'Śrīmad Bhāgavatam — Canto 1',
@@ -102,7 +108,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU3qHWaIGVplNFZZzzsl-Ul3',
         cantoNumber: 1,
         icon: '📖',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Parīkṣit', 'Kali-yuga', 'Sūta Gosvāmī'],
     },
     {
@@ -117,7 +123,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU2UgUwvQd2vsOv6FzFDkbwe',
         cantoNumber: 2,
         icon: '🌌',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Virāṭ-rūpa', 'Creation', 'Śukadeva'],
     },
     {
@@ -132,7 +138,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU0nbACvlzC1SaYwNutFOy2h',
         cantoNumber: 3,
         icon: '🐗',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Vidura', 'Maitreya', 'Lord Varāha'],
     },
     {
@@ -147,7 +153,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU0fD6X76w_8ZeqlPNh7dGYc',
         cantoNumber: 3,
         icon: '🙏',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Kapila', 'Devahūti', 'Sāṅkhya'],
     },
     {
@@ -162,7 +168,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU0mdAumUUOfGXkJqvXVH1AY',
         cantoNumber: 4,
         icon: '⭐',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Dhruva', 'Pṛthu', 'Pracetās'],
     },
     {
@@ -177,7 +183,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU1kr7wZXGE0xcJNP0krHRCa',
         cantoNumber: 4,
         icon: '📅',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Sunday Class', 'Canto 4', 'In-depth'],
     },
     {
@@ -192,7 +198,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU36PmYS85EqKxoieJsl2koz',
         cantoNumber: 5,
         icon: '🌍',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Ṛṣabhadeva', 'Jaḍa Bharata', 'Cosmology'],
     },
     {
@@ -207,7 +213,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU0odSCsrZTC6AasuMQxgMSN',
         cantoNumber: 5,
         icon: '📅',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Saturday Class', 'Canto 5', 'Cosmology'],
     },
     {
@@ -222,7 +228,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU2RM9I70AuILKr__7awy9sK',
         cantoNumber: 6,
         icon: '📿',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Ajāmila', 'Vṛtrāsura', 'Holy Name'],
     },
     {
@@ -237,7 +243,7 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU1z3Fx7L6fPax41r-SpPBUg',
         cantoNumber: 7,
         icon: '🦁',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Prahlāda', 'Nṛsiṁhadeva', 'Hiraṇyakaśipu'],
     },
     {
@@ -252,13 +258,13 @@ export const SB_COURSES: Course[] = [
         youtubePlaylistId: 'PLstzwZvVxLU1Aonj64NzYzFePkaO8QOLN',
         cantoNumber: 8,
         icon: '🐘',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Gajendra', 'Vāmanadeva', 'Samudra Manthana'],
     },
 ];
 
 // ─── Supplementary Courses ──────────────────────────────
-export const SUPPLEMENTARY_COURSES: Course[] = [
+export const SUPPLEMENTARY_COURSES: CatalogItem[] = [
     {
         slug: 'nectar-of-devotion',
         title: 'The Nectar of Devotion',
@@ -270,7 +276,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU0Liz0KhlZnM5BW0swVCdip',
         youtubePlaylistId: 'PLstzwZvVxLU0Liz0KhlZnM5BW0swVCdip',
         icon: '🍯',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Rūpa Gosvāmī', 'Rasa', 'Bhakti'],
     },
     {
@@ -284,7 +290,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU0vGnLyE--tBS4N5wMvix-J',
         youtubePlaylistId: 'PLstzwZvVxLU0vGnLyE--tBS4N5wMvix-J',
         icon: '🪷',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Kapila', 'Devahūti', 'Sāṅkhya'],
     },
     {
@@ -298,7 +304,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU1R55qnsL5DtnJOaga-Z0VV',
         youtubePlaylistId: 'PLstzwZvVxLU1R55qnsL5DtnJOaga-Z0VV',
         icon: '🗺️',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Overview', 'Summary', 'Introduction'],
     },
     {
@@ -312,7 +318,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU3wlYKzabdc3q1FvKKQmKae',
         youtubePlaylistId: 'PLstzwZvVxLU3wlYKzabdc3q1FvKKQmKae',
         icon: '🚶',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Journey', 'Seeker', 'Inspiration'],
     },
     {
@@ -326,7 +332,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU3zTHD4cTfqAgliEln46NH7',
         youtubePlaylistId: 'PLstzwZvVxLU3zTHD4cTfqAgliEln46NH7',
         icon: '🔍',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Thematic', 'Cross-canto', 'Insights'],
     },
     {
@@ -340,7 +346,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU3QaeiLs6oAjs5eEmkOzjGP',
         youtubePlaylistId: 'PLstzwZvVxLU3QaeiLs6oAjs5eEmkOzjGP',
         icon: '💎',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Tattva', 'Philosophy', 'Bhāgavata'],
     },
     {
@@ -354,7 +360,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU01bor8MJ5Ae1s9hybW_BW-',
         youtubePlaylistId: 'PLstzwZvVxLU01bor8MJ5Ae1s9hybW_BW-',
         icon: '📿',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Sādhana', 'Practice', 'Daily'],
     },
     {
@@ -368,7 +374,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU27ahwrm5-sUmZP-CGFRoB9',
         youtubePlaylistId: 'PLstzwZvVxLU27ahwrm5-sUmZP-CGFRoB9',
         icon: '📚',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Canto 3', 'Extended', 'Supplementary'],
     },
     {
@@ -382,7 +388,7 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU0j5A_QI33zxwumeVRt4P7y',
         youtubePlaylistId: 'PLstzwZvVxLU0j5A_QI33zxwumeVRt4P7y',
         icon: '📅',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Sunday Class', 'Canto 3', 'Discussion'],
     },
     {
@@ -396,63 +402,302 @@ export const SUPPLEMENTARY_COURSES: Course[] = [
         youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLstzwZvVxLU2DBLgOuBDKN0PgM86lctQ3',
         youtubePlaylistId: 'PLstzwZvVxLU2DBLgOuBDKN0PgM86lctQ3',
         icon: '🇮🇳',
-        instructor: INSTRUCTOR.name,
+        instructor: INSTRUCTOR_PAVANESWAR.name,
         tags: ['Telugu', 'Regional', 'భాగవతం'],
     },
 ];
 
-// ─── Course Groups (for navigation) ────────────────────
-export const COURSE_GROUPS: CourseGroup[] = [
+// ─── Media Series ─────────────────────────────────────────
+
+export const MEDIA_BG_PLAYLISTS: CatalogItem[] = [
+    {
+        slug: 'sampati-bg',
+        title: 'Bhagavad Gītā — Complete Series',
+        subtitle: 'Chapter-wise Study by Sampati Dasa',
+        description: 'A comprehensive chapter-by-chapter study of Bhagavad-gītā As It Is, covering all 18 chapters with detailed explanations, practical applications, and deep philosophical insights.',
+        category: 'bg',
+        level: 'General',
+        videoCount: 51,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf3_ICriMu_FmZJsWwcZWZKM',
+        youtubePlaylistId: 'PLR9NxMJ4tXf3_ICriMu_FmZJsWwcZWZKM',
+        icon: '🕉️',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Bhagavad Gītā', 'Complete', '18 Chapters', 'Chapter-wise'],
+    },
+];
+
+export const MEDIA_SB_PLAYLISTS: CatalogItem[] = [
+    {
+        slug: 'sampati-sb',
+        title: 'Śrīmad Bhāgavatam — Series',
+        subtitle: 'Study by Sampati Dasa',
+        description: 'A guided study through the spotless Purāṇa — Śrīmad-Bhāgavatam. Covering the essential topics, characters, and philosophical teachings across the cantos.',
+        category: 'sb',
+        level: 'General',
+        videoCount: 14,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf33DRy2s3UjGxbEKS9IDrs_',
+        youtubePlaylistId: 'PLR9NxMJ4tXf33DRy2s3UjGxbEKS9IDrs_',
+        icon: '📖',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Śrīmad Bhāgavatam', 'Purāṇa', 'Canto-wise'],
+    },
+];
+
+export const MEDIA_VEDIC_PLAYLISTS: CatalogItem[] = [
+    {
+        slug: 'sampati-ramayan',
+        title: 'Original Valmiki Rāmāyan in Detail',
+        subtitle: 'Epic Narration by Sampati Dasa',
+        description: 'A detailed retelling of the original Valmiki Rāmāyaṇa, presenting the glories of Lord Rāmacandra, Sīta Devī, and Hanumān ji in an engaging narrative style.',
+        category: 'vedic-stories',
+        level: 'General',
+        videoCount: 55,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf2pnfPco7X4diOBk2NslJo-',
+        youtubePlaylistId: 'PLR9NxMJ4tXf2pnfPco7X4diOBk2NslJo-',
+        icon: '🏹',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Rāmāyaṇa', 'Valmiki', 'Epic', 'Lord Rāma'],
+    },
+    {
+        slug: 'sampati-ramayan-lessons',
+        title: 'Lessons from Rāmāyaṇa',
+        subtitle: 'Life Lessons & Moral Teachings',
+        description: 'Practical life lessons and moral teachings derived from the episodes of the Rāmāyaṇa — applicable to modern-day challenges.',
+        category: 'vedic-stories',
+        level: 'General',
+        videoCount: 16,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf2-Ng0CGWMzsb5rKX_SBTct',
+        youtubePlaylistId: 'PLR9NxMJ4tXf2-Ng0CGWMzsb5rKX_SBTct',
+        icon: '🌺',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Rāmāyaṇa', 'Lessons', 'Moral'],
+    },
+    {
+        slug: 'sampati-mahabharat-lessons',
+        title: 'Lessons from Mahābhārata',
+        subtitle: 'Insights from the Great Epic',
+        description: 'Key lessons from the Mahābhārata — exploring dharma, strategy, devotion, and the complexities of human nature.',
+        category: 'vedic-stories',
+        level: 'General',
+        videoCount: 6,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf2oi-DoZy2nMB8reFIINOQk',
+        youtubePlaylistId: 'PLR9NxMJ4tXf2oi-DoZy2nMB8reFIINOQk',
+        icon: '⚔️',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Mahābhārata', 'Dharma', 'Lessons'],
+    },
+];
+
+export const MEDIA_TOPICAL_PLAYLISTS: CatalogItem[] = [
+    {
+        slug: 'sampati-handling-lust',
+        title: 'Handling Lust',
+        subtitle: 'Practical Guidance',
+        description: 'Scriptural insights and practical guidance on overcoming lust — one of the greatest obstacles on the spiritual path.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 7,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf15Aqnvl6PF-z6X7IkLUxGx',
+        youtubePlaylistId: 'PLR9NxMJ4tXf15Aqnvl6PF-z6X7IkLUxGx',
+        icon: '🛡️',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Lust', 'Self-Control', 'Practical'],
+    },
+    {
+        slug: 'sampati-ekadashi',
+        title: 'Ekādaśī',
+        subtitle: 'The Glories of Fasting',
+        description: 'Understanding the significance, glories, and proper observance of Ekādaśī — the sacred fasting days.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 8,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf11dKywzGo-PGIARlFT1jPj',
+        youtubePlaylistId: 'PLR9NxMJ4tXf11dKywzGo-PGIARlFT1jPj',
+        icon: '🌙',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Ekādaśī', 'Fasting', 'Vrata'],
+    },
+    {
+        slug: 'sampati-reincarnation',
+        title: 'Re-incarnation',
+        subtitle: 'The Science of the Soul',
+        description: 'Exploring the Vedic science of reincarnation — evidence, explanations, and the journey of the soul across lifetimes.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 7,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf0wY6ikr22M-oOQzVzqxmyp',
+        youtubePlaylistId: 'PLR9NxMJ4tXf0wY6ikr22M-oOQzVzqxmyp',
+        icon: '🔄',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Reincarnation', 'Soul', 'Transmigration'],
+    },
+    {
+        slug: 'sampati-narasimha',
+        title: 'Glories of Lord Narasimha',
+        subtitle: 'The Half-Man Half-Lion Avatāra',
+        description: 'Exploring the glories, pastimes, and protection offered by Lord Nṛsiṁhadeva — the fierce protector of His devotees.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 3,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf1RkgLQWPua0ghJvLggnp2D',
+        youtubePlaylistId: 'PLR9NxMJ4tXf1RkgLQWPua0ghJvLggnp2D',
+        icon: '🦁',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Nṛsiṁha', 'Prahlāda', 'Protection'],
+    },
+    {
+        slug: 'sampati-janmashtami',
+        title: 'Janmāṣṭamī',
+        subtitle: 'Appearance of Lord Kṛṣṇa',
+        description: 'Special talks on the glorious appearance of Lord Śrī Kṛṣṇa and the significance of celebrating Janmāṣṭamī.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 7,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf3R8TbuB_IK_-mpRXZwLzul',
+        youtubePlaylistId: 'PLR9NxMJ4tXf3R8TbuB_IK_-mpRXZwLzul',
+        icon: '🎉',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Janmāṣṭamī', 'Kṛṣṇa', 'Festival'],
+    },
+    {
+        slug: 'sampati-radhashtami',
+        title: 'Rādhāṣṭamī',
+        subtitle: 'Appearance of Śrīmatī Rādhārāṇī',
+        description: 'Talks glorifying Śrīmatī Rādhārāṇī — the supreme devotee of Lord Kṛṣṇa and the embodiment of divine love.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 5,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf02scOqIU2wzt2NS1R0y8lG',
+        youtubePlaylistId: 'PLR9NxMJ4tXf02scOqIU2wzt2NS1R0y8lG',
+        icon: '🌹',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Rādhārāṇī', 'Festival', 'Divine Love'],
+    },
+    {
+        slug: 'sampati-lord-shiva',
+        title: 'Lord Shiva',
+        subtitle: 'The Greatest Vaiṣṇava',
+        description: 'Understanding Lord Śiva\'s exalted position as the greatest devotee of Lord Viṣṇu and his role in the cosmic order.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 2,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf1AvcKFNvflOHwXeWQ2NL6i',
+        youtubePlaylistId: 'PLR9NxMJ4tXf1AvcKFNvflOHwXeWQ2NL6i',
+        icon: '🔱',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Lord Śiva', 'Vaiṣṇava', 'Demigods'],
+    },
+    {
+        slug: 'sampati-inspiring-mothers',
+        title: 'Inspiring Mothers in Vedic Culture',
+        subtitle: 'Women of Strength & Devotion',
+        description: 'Stories of inspiring women and mothers from the Vedic tradition who exemplified devotion, courage, and wisdom.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 5,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf3Cx37D0BViiAh1_NBk2WVY',
+        youtubePlaylistId: 'PLR9NxMJ4tXf3Cx37D0BViiAh1_NBk2WVY',
+        icon: '👩‍👧',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Women', 'Mothers', 'Vedic Culture'],
+    },
+    {
+        slug: 'sampati-devotional-dramas',
+        title: 'Devotional Dramas',
+        subtitle: 'Theatrical Presentations',
+        description: 'Engaging devotional dramas and theatrical performances presenting Vedic stories and pastimes of the Lord.',
+        category: 'topical',
+        level: 'General',
+        videoCount: 13,
+        youtubePlaylistUrl: 'https://www.youtube.com/playlist?list=PLR9NxMJ4tXf0Mz9Xnzwz_J5S1-QI-9eIg',
+        youtubePlaylistId: 'PLR9NxMJ4tXf0Mz9Xnzwz_J5S1-QI-9eIg',
+        icon: '🎭',
+        instructor: INSTRUCTOR_SAMPATI.name,
+        tags: ['Drama', 'Theatre', 'Performance'],
+    },
+];
+
+
+// ─── Grouped Categories (For UI Rendering) ───────────────────
+export const CATALOG_GROUPS: CatalogGroup[] = [
     {
         id: 'bg',
         title: 'Bhagavad Gītā',
         titleSanskrit: 'भगवद्गीता',
-        description: 'Systematic study of the Song of God — 18 chapters in 3 modules',
+        description: 'Systematic studies and chapter-wise deep dives of the Song of God',
         icon: '🕉️',
         category: 'bg',
-        courses: BG_COURSES,
+        items: [...BG_COURSES, ...MEDIA_BG_PLAYLISTS],
     },
     {
         id: 'sb',
         title: 'Śrīmad Bhāgavatam',
         titleSanskrit: 'श्रीमद् भागवतम्',
-        description: 'Canto-wise systematic study — the ripened fruit of Vedic literature',
+        description: 'The ripened fruit of Vedic literature through canto-wise studies',
         icon: '📖',
         category: 'sb',
-        courses: SB_COURSES,
+        items: [...SB_COURSES, ...MEDIA_SB_PLAYLISTS],
+    },
+    {
+        id: 'vedic-stories',
+        title: 'Vedic Epics & Stories',
+        titleSanskrit: 'वैदिक कथाएँ',
+        description: 'Rāmāyaṇa, Mahābhārata, and timeless Vedic narratives',
+        icon: '🏹',
+        category: 'vedic-stories',
+        items: MEDIA_VEDIC_PLAYLISTS,
+    },
+    {
+        id: 'topical',
+        title: 'Topical Series',
+        titleSanskrit: 'विषय श्रृंखला',
+        description: 'Special topics on festivals, philosophy, and devotional life',
+        icon: '✨',
+        category: 'topical',
+        items: MEDIA_TOPICAL_PLAYLISTS,
     },
     {
         id: 'supplementary',
         title: 'Supplementary Courses',
         titleSanskrit: 'पूरक पाठ्यक्रम',
         description: 'Thematic studies, overviews, and special topic courses',
-        icon: '✨',
+        icon: '🔍',
         category: 'supplementary',
-        courses: SUPPLEMENTARY_COURSES,
+        items: SUPPLEMENTARY_COURSES,
     },
 ];
 
 // ─── Helpers ────────────────────────────────────────────
-export const ALL_COURSES: Course[] = [...BG_COURSES, ...SB_COURSES, ...SUPPLEMENTARY_COURSES];
+export const ALL_CATALOG_ITEMS: CatalogItem[] = [
+    ...BG_COURSES,
+    ...SB_COURSES,
+    ...SUPPLEMENTARY_COURSES,
+    ...MEDIA_BG_PLAYLISTS,
+    ...MEDIA_SB_PLAYLISTS,
+    ...MEDIA_VEDIC_PLAYLISTS,
+    ...MEDIA_TOPICAL_PLAYLISTS,
+];
 
-export function getCourseBySlug(slug: string): Course | undefined {
-    return ALL_COURSES.find((c) => c.slug === slug);
+export function getCatalogItemBySlug(slug: string): CatalogItem | undefined {
+    return ALL_CATALOG_ITEMS.find((c) => c.slug === slug);
 }
 
-export function getCoursesByCategory(category: CourseCategory): Course[] {
-    return ALL_COURSES.filter((c) => c.category === category);
+export function getCatalogItemsByCategory(category: CatalogCategory): CatalogItem[] {
+    return ALL_CATALOG_ITEMS.filter((c) => c.category === category);
 }
 
-export function getSBCoursesByCanto(cantoNumber: number): Course[] {
+// Special helper to get only systematic SB Canto courses (for nav and specific views)
+// Here, we filter only items taught by HG Pavaneswar Das as they strictly follow the canto numbering
+export function getSystematicSBCoursesByCanto(cantoNumber: number): CatalogItem[] {
     return SB_COURSES.filter((c) => c.cantoNumber === cantoNumber);
 }
 
 export function getTotalVideoCount(): number {
-    return ALL_COURSES.reduce((sum, c) => sum + c.videoCount, 0);
+    return ALL_CATALOG_ITEMS.reduce((sum, c) => sum + c.videoCount, 0);
 }
 
-// Primary SB courses (one per canto, for nav dropdown)
-export function getPrimarySBCourses(): Course[] {
+// Primary systematic SB courses (one per canto, for nav dropdown)
+export function getPrimarySBCourses(): CatalogItem[] {
     const seen = new Set<number>();
     return SB_COURSES.filter((c) => {
         if (c.cantoNumber && !seen.has(c.cantoNumber)) {

@@ -3,7 +3,7 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { PlayCircle, ExternalLink, BookOpen, ChevronRight, Share2, Check } from 'lucide-react';
-import { getCourseBySlug, ALL_COURSES, INSTRUCTOR, type Course } from '@/data/courses-data';
+import { getCatalogItemBySlug, ALL_CATALOG_ITEMS, type CatalogItem } from '@/data/catalog-data';
 import { useLearning } from '@/contexts/LearningContext';
 import { notFound } from 'next/navigation';
 
@@ -20,7 +20,7 @@ function ProgressBar({ percent, height = 6 }: { percent: number; height?: number
     );
 }
 
-function RelatedCourseCard({ course }: { course: Course }) {
+function RelatedCourseCard({ course }: { course: CatalogItem }) {
     return (
         <Link
             href={`/courses/${course.slug}`}
@@ -55,7 +55,7 @@ function RelatedCourseCard({ course }: { course: Course }) {
 
 export default function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
-    const course = getCourseBySlug(slug);
+    const course = getCatalogItemBySlug(slug);
     const { isEnrolled, enrollInCourse, getProgressPercent, getCompletedCount, getProgress, markLessonComplete, markLessonIncomplete } = useLearning();
 
     if (!course) {
@@ -68,11 +68,18 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
     const progress = getProgress(course.slug);
 
     // Get related courses (same category, different slug)
-    const related = ALL_COURSES
+    const related = ALL_CATALOG_ITEMS
         .filter(c => c.category === course.category && c.slug !== course.slug)
         .slice(0, 4);
 
-    const categoryLabel = course.category === 'bg' ? 'Bhagavad Gītā' : course.category === 'sb' ? 'Śrīmad Bhāgavatam' : 'Supplementary';
+    const categoryLabels: Record<string, string> = {
+        'bg': 'Bhagavad Gītā',
+        'sb': 'Śrīmad Bhāgavatam',
+        'vedic-stories': 'Vedic Stories',
+        'topical': 'Topical Series',
+        'supplementary': 'Supplementary Courses',
+    };
+    const categoryLabel = categoryLabels[course.category] || course.category;
     const categoryHref = course.category === 'supplementary' ? '/courses#supplementary' : `/courses/${course.category}`;
 
     const levelColors: Record<string, { bg: string; text: string; border: string }> = {
@@ -81,7 +88,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
         'Bhagavata Sevā': { bg: 'rgba(107, 66, 38, 0.1)', text: 'var(--color-accent)', border: 'rgba(107, 66, 38, 0.2)' },
         'General': { bg: 'rgba(107, 142, 35, 0.1)', text: '#5c7a1f', border: 'rgba(107, 142, 35, 0.2)' },
     };
-    const lc = levelColors[course.level] || levelColors['General'];
+    const lc = course.level ? levelColors[course.level] || levelColors['General'] : levelColors['General'];
 
     return (
         <div className="min-h-screen" style={{ background: 'var(--color-bg-warm)' }}>
@@ -135,13 +142,15 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
 
                     {/* Meta + Enroll */}
                     <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{
-                            background: lc.bg,
-                            color: lc.text,
-                            border: `1px solid ${lc.border}`,
-                        }}>
-                            {course.level}
-                        </span>
+                        {course.level && (
+                            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{
+                                background: lc.bg,
+                                color: lc.text,
+                                border: `1px solid ${lc.border}`,
+                            }}>
+                                {course.level}
+                            </span>
+                        )}
                         <span className="flex items-center gap-1 text-sm" style={{ color: 'rgba(245, 237, 224, 0.6)' }}>
                             <PlayCircle size={14} /> {course.videoCount} Video Lessons
                         </span>
@@ -298,10 +307,10 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-                                        {INSTRUCTOR.name}
+                                        {course.instructor}
                                     </p>
                                     <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                                        {INSTRUCTOR.channel}
+                                        Master Teacher
                                     </p>
                                 </div>
                             </div>
@@ -309,7 +318,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                                 color: 'var(--color-text-secondary)',
                                 lineHeight: 1.6,
                             }}>
-                                {INSTRUCTOR.bio}
+                                Dedicated to systematically teaching the deep philosophical truths of the Vedic literature.
                             </p>
                         </div>
                     </div>
@@ -329,11 +338,15 @@ export default function CourseDetailPage({ params }: { params: Promise<{ slug: s
                                     <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{course.videoCount}</span>
                                 </div>
                                 <div className="h-px" style={{ background: 'var(--color-border-light)' }} />
-                                <div className="flex items-center justify-between">
-                                    <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Level</span>
-                                    <span className="text-sm font-bold" style={{ color: lc.text }}>{course.level}</span>
-                                </div>
-                                <div className="h-px" style={{ background: 'var(--color-border-light)' }} />
+                                {course.level && (
+                                    <>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Level</span>
+                                            <span className="text-sm font-bold" style={{ color: lc.text }}>{course.level}</span>
+                                        </div>
+                                        <div className="h-px" style={{ background: 'var(--color-border-light)' }} />
+                                    </>
+                                )}
                                 <div className="flex items-center justify-between">
                                     <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Category</span>
                                     <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{categoryLabel}</span>

@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { PlayCircle, ChevronRight, ArrowLeft } from 'lucide-react';
-import { SB_COURSES, getSBCoursesByCanto } from '@/data/courses-data';
+import { ALL_CATALOG_ITEMS } from '@/data/catalog-data';
 import { SB_CANTOS } from '@/data/sb-cantos';
 
 export default function SBCoursesPage() {
+    const sbCourses = ALL_CATALOG_ITEMS.filter(c => c.category === 'sb');
     // Group cantos that have courses
     const cantosWithCourses = SB_CANTOS.filter(canto =>
-        SB_COURSES.some(c => c.cantoNumber === canto.number)
+        sbCourses.some(c => c.cantoNumber === canto.number)
     );
 
     return (
@@ -52,7 +53,7 @@ export default function SBCoursesPage() {
             <section className="max-w-[1200px] mx-auto px-8 py-12">
                 <div className="flex flex-col gap-10">
                     {cantosWithCourses.map((canto, i) => {
-                        const courses = getSBCoursesByCanto(canto.number);
+                        const courses = sbCourses.filter(c => c.cantoNumber === canto.number);
                         return (
                             <div key={canto.number} className="card-elevated overflow-hidden" style={{
                                 animation: `fadeInUp 0.5s ease-out ${i * 80}ms forwards`,
@@ -167,7 +168,7 @@ export default function SBCoursesPage() {
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {SB_CANTOS.map((canto) => {
-                            const hasCourse = SB_COURSES.some(c => c.cantoNumber === canto.number);
+                            const hasCourse = sbCourses.some(c => c.cantoNumber === canto.number);
                             return (
                                 <div key={canto.number} className="flex items-start gap-3 p-3 rounded-lg" style={{
                                     background: hasCourse ? 'rgba(212, 168, 83, 0.08)' : 'var(--color-bg-warm)',

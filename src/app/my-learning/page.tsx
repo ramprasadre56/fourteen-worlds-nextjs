@@ -4,8 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { PlayCircle, BookOpen, GraduationCap, Check, BarChart3 } from 'lucide-react';
 import { useLearning, type CourseProgress } from '@/contexts/LearningContext';
-import { getMediaPlaylistBySlug } from '@/data/media-data';
-import { getCourseBySlug, type Course } from '@/data/courses-data';
+import { getCatalogItemBySlug, type CatalogItem } from '@/data/catalog-data';
 import { useAuth } from '@/contexts/AuthContext';
 
 /* ─── Progress Bar ──────────────────────────────────────── */
@@ -29,18 +28,17 @@ function LearningCard({ progress: courseProgress }: { progress: CourseProgress }
     const completed = getCompletedCount(courseProgress.slug);
     const isComplete = percent >= 100;
 
-    const mediaPlaylist = getMediaPlaylistBySlug(courseProgress.slug);
-    const course = getCourseBySlug(courseProgress.slug);
-    const item = mediaPlaylist || course;
+    const item = getCatalogItemBySlug(courseProgress.slug);
 
     if (!item) return null;
 
-    const title = 'title' in item ? item.title : '';
-    const icon = 'icon' in item ? item.icon : '📖';
-    const href = mediaPlaylist ? `/media/${courseProgress.slug}` : `/courses/${courseProgress.slug}`;
-    const videoCount = mediaPlaylist?.videoCount || (course as Course)?.videoCount || courseProgress.totalLessons;
-    const type = mediaPlaylist ? 'Media' : 'Course';
-    const subtitle = mediaPlaylist?.subtitle || (course as Course)?.subtitle || '';
+    const title = item.title;
+    const icon = item.icon || '📖';
+    const href = `/courses/${courseProgress.slug}`;
+    const videoCount = item.videoCount || courseProgress.totalLessons;
+    const isVedicOrTopical = item.category === 'vedic-stories' || item.category === 'topical';
+    const type = isVedicOrTopical ? 'Media' : 'Course';
+    const subtitle = item.subtitle || '';
 
     const enrolledDate = new Date(courseProgress.enrolledAt);
     const lastAccessed = new Date(courseProgress.lastAccessedAt);
@@ -53,17 +51,13 @@ function LearningCard({ progress: courseProgress }: { progress: CourseProgress }
         }}>
             {/* Thumbnail */}
             <Link href={href} className="block sm:w-[200px] flex-shrink-0 relative aspect-video sm:aspect-auto min-h-[120px]" style={{
-                background: mediaPlaylist
-                    ? mediaPlaylist.category === 'bg'
-                        ? 'linear-gradient(135deg, #3a0f0f, #8b1a1a)'
-                        : mediaPlaylist.category === 'sb'
-                            ? 'linear-gradient(135deg, #3a2a0f, #b89230)'
-                            : mediaPlaylist.category === 'vedic-stories'
-                                ? 'linear-gradient(135deg, #2d1810, #8b5a2e)'
-                                : 'linear-gradient(135deg, #1a2e0a, #5c7a1f)'
-                    : course?.category === 'bg'
-                        ? 'linear-gradient(135deg, #3a0f0f, #8b1a1a)'
-                        : 'linear-gradient(135deg, #3a2a0f, #b89230)',
+                background: item.category === 'bg'
+                    ? 'linear-gradient(135deg, #3a0f0f, #8b1a1a)'
+                    : item.category === 'sb'
+                        ? 'linear-gradient(135deg, #3a2a0f, #b89230)'
+                        : item.category === 'vedic-stories'
+                            ? 'linear-gradient(135deg, #2d1810, #8b5a2e)'
+                            : 'linear-gradient(135deg, #1a2e0a, #5c7a1f)',
             }}>
                 <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-4xl opacity-50">{icon}</span>
@@ -233,10 +227,7 @@ export default function MyLearningPage() {
                         </p>
                         <div className="flex items-center justify-center gap-4">
                             <Link href="/courses" className="btn-primary inline-flex items-center gap-2">
-                                <GraduationCap size={16} /> Browse Courses
-                            </Link>
-                            <Link href="/media" className="btn-golden inline-flex items-center gap-2">
-                                <PlayCircle size={16} /> Media Library
+                                <GraduationCap size={16} /> Explore Courses
                             </Link>
                         </div>
                     </div>

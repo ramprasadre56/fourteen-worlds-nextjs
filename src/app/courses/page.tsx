@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { PlayCircle, ChevronRight, ExternalLink, Search, BookOpen, GraduationCap } from 'lucide-react';
 import {
-    COURSE_GROUPS, ALL_COURSES, INSTRUCTOR, getTotalVideoCount, type Course, type CourseCategory
-} from '@/data/courses-data';
+    CATALOG_GROUPS, ALL_CATALOG_ITEMS, getTotalVideoCount, type CatalogItem, type CatalogCategory
+} from '@/data/catalog-data';
 import { useLearning } from '@/contexts/LearningContext';
 
 /* ─── Progress Bar ──────────────────────────────────────── */
@@ -23,7 +23,7 @@ function ProgressBar({ percent }: { percent: number }) {
 }
 
 /* ─── Featured Hero Card (DLAI-style) ───────────────────── */
-function FeaturedCourseCard({ course }: { course: Course }) {
+function FeaturedCourseCard({ course }: { course: CatalogItem }) {
     const { isEnrolled, enrollInCourse, getProgressPercent, getCompletedCount } = useLearning();
     const enrolled = isEnrolled(course.slug);
     const percent = getProgressPercent(course.slug);
@@ -35,7 +35,7 @@ function FeaturedCourseCard({ course }: { course: Course }) {
         'Bhagavata Sevā': { bg: 'rgba(107, 66, 38, 0.15)', text: 'var(--color-accent)' },
         'General': { bg: 'rgba(107, 142, 35, 0.15)', text: '#5c7a1f' },
     };
-    const lc = levelColors[course.level] || levelColors['General'];
+    const lc = course.level ? levelColors[course.level] || levelColors['General'] : levelColors['General'];
 
     return (
         <div className="rounded-2xl overflow-hidden flex flex-col md:flex-row" style={{
@@ -81,7 +81,7 @@ function FeaturedCourseCard({ course }: { course: Course }) {
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg">🙏</span>
                         <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
-                            {INSTRUCTOR.name}
+                            {course.instructor}
                         </span>
                     </div>
 
@@ -106,9 +106,11 @@ function FeaturedCourseCard({ course }: { course: Course }) {
 
                     {/* Level / Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: lc.bg, color: lc.text }}>
-                            {course.level}
-                        </span>
+                        {course.level && (
+                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: lc.bg, color: lc.text }}>
+                                {course.level}
+                            </span>
+                        )}
                         {course.chapterRange && (
                             <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{
                                 border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)',
@@ -178,7 +180,7 @@ function FeaturedCourseCard({ course }: { course: Course }) {
 }
 
 /* ─── Small Course Card (DLAI-style) ────────────────────── */
-function SmallCourseCard({ course }: { course: Course }) {
+function SmallCourseCard({ course }: { course: CatalogItem }) {
     const { isEnrolled, getProgressPercent, getCompletedCount } = useLearning();
     const enrolled = isEnrolled(course.slug);
     const percent = getProgressPercent(course.slug);
@@ -190,7 +192,7 @@ function SmallCourseCard({ course }: { course: Course }) {
         'Bhagavata Sevā': { bg: 'rgba(107, 66, 38, 0.1)', text: 'var(--color-accent)' },
         'General': { bg: 'rgba(107, 142, 35, 0.1)', text: '#5c7a1f' },
     };
-    const lc = levelColors[course.level] || levelColors['General'];
+    const lc = course.level ? levelColors[course.level] || levelColors['General'] : levelColors['General'];
 
     return (
         <Link
@@ -239,11 +241,13 @@ function SmallCourseCard({ course }: { course: Course }) {
             <div className="p-4 flex flex-col flex-1">
                 <div className="flex items-center justify-between gap-1.5 mb-2">
                     <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                        {INSTRUCTOR.name}
+                        {course.instructor}
                     </span>
-                    <span className="text-[10px] font-semibold px-1.5 py-[2px] rounded-full" style={{ background: lc.bg, color: lc.text }}>
-                        {course.level}
-                    </span>
+                    {course.level && (
+                        <span className="text-[10px] font-semibold px-1.5 py-[2px] rounded-full" style={{ background: lc.bg, color: lc.text }}>
+                            {course.level}
+                        </span>
+                    )}
                 </div>
                 <h4 className="text-sm font-bold mb-1 group-hover:text-[var(--color-primary)] transition-colors" style={{
                     fontFamily: 'var(--font-heading)',
@@ -282,26 +286,28 @@ function SmallCourseCard({ course }: { course: Course }) {
 }
 
 /* ─── Sidebar ───────────────────────────────────────────── */
-const CATEGORY_FILTERS: { id: CourseCategory | 'all'; label: string; icon: string; count: number }[] = [
-    { id: 'all', label: 'All Courses', icon: '📚', count: ALL_COURSES.length },
-    { id: 'bg', label: 'Bhagavad Gītā', icon: '🕉️', count: ALL_COURSES.filter(p => p.category === 'bg').length },
-    { id: 'sb', label: 'Śrīmad Bhāgavatam', icon: '📖', count: ALL_COURSES.filter(p => p.category === 'sb').length },
-    { id: 'supplementary', label: 'Supplementary', icon: '✨', count: ALL_COURSES.filter(p => p.category === 'supplementary').length },
+const CATEGORY_FILTERS: { id: CatalogCategory | 'all'; label: string; icon: string; count: number }[] = [
+    { id: 'all', label: 'All Content', icon: '📚', count: ALL_CATALOG_ITEMS.length },
+    { id: 'bg', label: 'Bhagavad Gītā', icon: '🕉️', count: ALL_CATALOG_ITEMS.filter(p => p.category === 'bg').length },
+    { id: 'sb', label: 'Śrīmad Bhāgavatam', icon: '📖', count: ALL_CATALOG_ITEMS.filter(p => p.category === 'sb').length },
+    { id: 'vedic-stories', label: 'Vedic Stories', icon: '🏹', count: ALL_CATALOG_ITEMS.filter(p => p.category === 'vedic-stories').length },
+    { id: 'topical', label: 'Topical Series', icon: '✨', count: ALL_CATALOG_ITEMS.filter(p => p.category === 'topical').length },
+    { id: 'supplementary', label: 'Supplementary', icon: '🔍', count: ALL_CATALOG_ITEMS.filter(p => p.category === 'supplementary').length },
 ];
 
 /* ─── Main Page ─────────────────────────────────────────── */
 export default function CoursesPage() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [activeCategory, setActiveCategory] = useState<CourseCategory | 'all'>('all');
+    const [activeCategory, setActiveCategory] = useState<CatalogCategory | 'all'>('all');
     const totalVideos = getTotalVideoCount();
 
-    // Map `CourseCategory` closely to group ID
-    const filteredGroups = COURSE_GROUPS.filter(g =>
+    // Map `CatalogCategory` closely to group ID
+    const filteredGroups = CATALOG_GROUPS.filter(g =>
         activeCategory === 'all' || g.id === activeCategory
     );
 
     const searchFiltered = searchQuery.trim()
-        ? ALL_COURSES.filter(p =>
+        ? ALL_CATALOG_ITEMS.filter(p =>
             p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             p.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
         )
@@ -321,7 +327,7 @@ export default function CoursesPage() {
                         Explore Courses
                     </h1>
                     <p className="text-base" style={{ color: 'rgba(245, 237, 224, 0.6)' }}>
-                        {ALL_COURSES.length} courses • {totalVideos}+ lessons by {INSTRUCTOR.name}
+                        {ALL_CATALOG_ITEMS.length} items • {totalVideos}+ lessons by Senior Devotees
                     </p>
                 </div>
             </div>
@@ -383,35 +389,48 @@ export default function CoursesPage() {
                                 </div>
                             </div>
 
-                            {/* Instructor Card */}
+                            {/* Instructors Info */}
                             <div className="rounded-xl p-4" style={{
                                 background: 'var(--color-surface)',
                                 border: '1px solid var(--color-border-light)',
                             }}>
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{
-                                        background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))',
-                                    }}>
-                                        <span>🙏</span>
-                                    </div>
+                                <h3 className="text-xs font-bold mb-3 uppercase tracking-wider" style={{
+                                    color: 'var(--color-text)',
+                                }}>
+                                    Instructors
+                                </h3>
+                                
+                                <div className="flex flex-col gap-4">
                                     <div>
-                                        <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-                                            {INSTRUCTOR.name}
-                                        </p>
-                                        <p className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-                                            Master • Teacher 
-                                        </p>
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs" style={{
+                                                background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))',
+                                            }}>
+                                                <span>🙏</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                                                    HG Pavaneswar Das
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs" style={{
+                                                background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))',
+                                            }}>
+                                                <span>📝</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                                                    HG Sampati Dasa
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <a
-                                    href={INSTRUCTOR.channelUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1 text-xs font-semibold mt-2"
-                                    style={{ color: 'var(--color-primary)' }}
-                                >
-                                    <ExternalLink size={12} /> YouTube Channel
-                                </a>
                             </div>
                         </div>
                     </aside>
@@ -492,15 +511,15 @@ export default function CoursesPage() {
                                         </div>
                                     </div>
 
-                                    {group.courses.length > 0 && (
+                                    {group.items.length > 0 && (
                                         <div className="mb-6">
-                                            <FeaturedCourseCard course={group.courses[0]} />
+                                            <FeaturedCourseCard course={group.items[0]} />
                                         </div>
                                     )}
 
-                                    {group.courses.length > 1 && (
+                                    {group.items.length > 1 && (
                                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                                            {group.courses.slice(1).map((c) => (
+                                            {group.items.slice(1).map((c) => (
                                                 <SmallCourseCard key={c.slug} course={c} />
                                             ))}
                                         </div>

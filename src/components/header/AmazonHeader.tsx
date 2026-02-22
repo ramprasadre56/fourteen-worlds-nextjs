@@ -1,16 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Menu, ChevronDown, Heart, X, BookOpen, PlayCircle, ChevronRight, GraduationCap, Sparkles } from 'lucide-react';
+import { ShoppingCart, Menu, ChevronDown, X, BookOpen, PlayCircle, ChevronRight, GraduationCap, Sparkles } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useRef, useEffect } from 'react';
-import { BG_COURSES, getPrimarySBCourses, SUPPLEMENTARY_COURSES } from '@/data/courses-data';
+import { BG_COURSES, getPrimarySBCourses, SUPPLEMENTARY_COURSES } from '@/data/catalog-data';
 
 const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Courses', href: '/courses', hasMega: true },
-    { label: 'Media', href: '/media' },
     { label: 'My Learning', href: '/my-learning' },
     { label: 'Library', href: '/library' },
     { label: 'Back to Godhead', href: '/backtogodhead' },
@@ -528,28 +527,7 @@ export function AmazonHeader() {
                             </span>
                         </Link>
 
-                        {/* Donate */}
-                        <Link
-                            href="/donate"
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-semibold text-sm cursor-pointer"
-                            style={{
-                                background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%)',
-                                color: 'var(--color-text)',
-                                transition: 'all var(--transition-base)',
-                                boxShadow: '0 2px 8px rgba(212, 168, 83, 0.25)',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-1px)';
-                                e.currentTarget.style.boxShadow = '0 4px 16px rgba(212, 168, 83, 0.35)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 2px 8px rgba(212, 168, 83, 0.25)';
-                            }}
-                        >
-                            <Heart size={14} />
-                            <span>Donate</span>
-                        </Link>
+
 
                         {/* Mobile Menu Toggle */}
                         <button

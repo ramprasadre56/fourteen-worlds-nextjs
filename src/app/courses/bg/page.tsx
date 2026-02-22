@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { BookOpen, PlayCircle, ChevronRight, ArrowLeft } from 'lucide-react';
-import { BG_COURSES } from '@/data/courses-data';
+import { ALL_CATALOG_ITEMS } from '@/data/catalog-data';
 import { BG_CHAPTERS } from '@/data/bg-chapters';
 
 export default function BGCoursesPage() {
+    const bgCourses = ALL_CATALOG_ITEMS.filter(c => c.category === 'bg' && c.level === 'Bhakti Śāstrī');
+
     return (
         <div className="min-h-screen" style={{ background: 'var(--color-bg-warm)' }}>
             {/* Hero */}
@@ -46,7 +48,7 @@ export default function BGCoursesPage() {
             {/* Course Modules */}
             <section className="max-w-[1200px] mx-auto px-8 py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-                    {BG_COURSES.map((course, i) => {
+                    {bgCourses.map((course, i) => {
                         const range = course.chapterRange?.split('–').map(Number) || [1, 6];
                         const chapters = BG_CHAPTERS.filter(ch => ch.number >= range[0] && ch.number <= range[1]);
 
