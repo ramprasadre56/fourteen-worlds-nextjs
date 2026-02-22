@@ -1,333 +1,287 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { Video, Image as ImageIcon, BookOpen, Play, Filter, Sparkles } from 'lucide-react';
+import {
+    PlayCircle, ChevronRight, ArrowRight, ExternalLink, BookOpen,
+    GraduationCap,
+} from 'lucide-react';
+import {
+    MEDIA_GROUPS, ALL_MEDIA_PLAYLISTS, MEDIA_INSTRUCTOR,
+    getMediaTotalVideoCount, type MediaPlaylist,
+} from '@/data/media-data';
 
-import gitaPravahaData from '@/data/bg_gauranga_videos.json';
-import sampatiData from '@/data/bg_sampati_videos.json';
-import sbOverviewData from '@/data/sb_overview_videos.json';
-
-const gitaPravahaVideos = gitaPravahaData.videos.map((v, idx) => ({
-    id: `gp-${idx}`,
-    title: v.title,
-    thumbnail: `https://img.youtube.com/vi/${v.video_id}/mqdefault.jpg`,
-    url: v.url,
-    playlist: 'Gita Pravaha',
-    speaker: 'Gauranga Darshan Das',
-    video_id: v.video_id,
-}));
-
-const sampatiVideos = sampatiData.videos.map((v, idx) => ({
-    id: `sd-${idx}`,
-    title: v.title,
-    thumbnail: `https://img.youtube.com/vi/${v.video_id}/mqdefault.jpg`,
-    url: v.url,
-    playlist: v.playlist || 'Bhagavad Gita',
-    speaker: 'Sampati Dasa',
-    video_id: v.video_id,
-}));
-
-const sbVideos = sbOverviewData.videos.map((v, idx) => ({
-    id: `sb-${idx}`,
-    title: v.title,
-    thumbnail: v.thumbnail,
-    url: v.url,
-    playlist: 'Srimad Bhagavatam Overview',
-    speaker: 'Bhakti Vaibhav',
-    video_id: v.video_id,
-}));
-
-const allVideos = [...gitaPravahaVideos, ...sampatiVideos, ...sbVideos];
-const playlists = ['All', ...Array.from(new Set(allVideos.map(v => v.playlist)))];
-
-const photos = [
-    { id: 1, title: '14 Lokas Diagram', src: '/home_page/14-lokas.jpg' },
-    { id: 2, title: '14 Planetary Systems', src: '/home_page/14-planetary-systems.png' },
-    { id: 3, title: 'Lokas Universe Structure', src: '/home_page/lokas.jpg' },
-    { id: 4, title: 'Upper Planetary Systems', src: '/home_page/7-upper-worlds.jpg' },
-    { id: 5, title: 'Lower Planetary Systems', src: '/home_page/7-lower-worlds.jpg' },
-    { id: 6, title: 'Three Realms Overview', src: '/home_page/3-realms_s.jpg' },
-    { id: 7, title: 'One Universe', src: '/home_page/one-universe.jpg' },
-    { id: 8, title: 'Vishnu on Lotus', src: '/home_page/vishnu_lotus.jpg' },
-    { id: 9, title: 'Brahma on Lotus', src: '/home_page/brahma-lotus.jpg' },
-    { id: 10, title: 'Srila Prabhupada', src: '/home_page/prabhupada_meditation.png' },
-];
-
-const flipbooks = [
-    { id: 1, title: 'Bhagavad Gita As It Is', cover: '/books/bg.jpg', pages: 892 },
-    { id: 2, title: 'Srimad Bhagavatam Canto 1', cover: '/books/sb.jpg', pages: 456 },
-    { id: 3, title: 'Krishna Book', cover: '/books/kb.jpg', pages: 678 },
-];
-
-type Tab = 'videos' | 'photos' | 'flipbooks';
-
-export default function MediaPage() {
-    const [activeTab, setActiveTab] = useState<Tab>('videos');
-    const [selectedPlaylist, setSelectedPlaylist] = useState('All');
-
-    const filteredVideos = selectedPlaylist === 'All'
-        ? allVideos
-        : allVideos.filter(v => v.playlist === selectedPlaylist);
-
-    const tabs = [
-        { id: 'videos' as Tab, label: `Videos (${allVideos.length})`, icon: Video },
-        { id: 'photos' as Tab, label: 'Photos', icon: ImageIcon },
-        { id: 'flipbooks' as Tab, label: 'Flipbooks', icon: BookOpen },
-    ];
+function PlaylistCard({ playlist, index }: { playlist: MediaPlaylist; index: number }) {
+    const catColors: Record<string, { accent: string; accentBg: string }> = {
+        bg: { accent: 'var(--color-primary)', accentBg: 'rgba(139, 26, 26, 0.08)' },
+        sb: { accent: 'var(--color-secondary-dark)', accentBg: 'rgba(212, 168, 83, 0.12)' },
+        'vedic-stories': { accent: 'var(--color-accent)', accentBg: 'rgba(107, 66, 38, 0.08)' },
+        topical: { accent: '#5c7a1f', accentBg: 'rgba(107, 142, 35, 0.08)' },
+    };
+    const cc = catColors[playlist.category] || catColors.topical;
 
     return (
-        <div className="min-h-screen py-10" style={{ background: 'var(--color-bg)' }}>
-            <div className="w-full max-w-[1440px] mx-auto px-8">
-                {/* Header */}
-                <div className="text-center mb-10">
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                        <div className="w-8 h-px" style={{ background: 'var(--color-secondary)' }} />
-                        <Sparkles size={16} style={{ color: 'var(--color-secondary)' }} />
-                        <div className="w-8 h-px" style={{ background: 'var(--color-secondary)' }} />
-                    </div>
-                    <h1
-                        className="text-4xl font-bold mb-4"
-                        style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}
-                    >
-                        Media Gallery
-                    </h1>
-                    <p className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
-                        {allVideos.length} videos on Bhagavad Gita, Srimad Bhagavatam &amp; Vedic wisdom
-                    </p>
+        <Link
+            href={`/media/${playlist.slug}`}
+            className="group card-elevated flex flex-col overflow-hidden cursor-pointer"
+            style={{
+                opacity: 0,
+                animation: `fadeInUp 0.5s ease-out ${index * 60}ms forwards`,
+            }}
+        >
+            {/* Accent bar */}
+            <div className="h-1.5 w-full" style={{
+                background: playlist.category === 'bg'
+                    ? 'linear-gradient(90deg, var(--color-primary), var(--color-primary-light))'
+                    : playlist.category === 'sb'
+                        ? 'linear-gradient(90deg, var(--color-secondary-dark), var(--color-secondary))'
+                        : playlist.category === 'vedic-stories'
+                            ? 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))'
+                            : 'linear-gradient(90deg, #5c7a1f, #7ca82f)',
+            }} />
+
+            <div className="flex flex-col flex-1 p-5">
+                {/* Icon + Category */}
+                <div className="flex items-start justify-between mb-3">
+                    <span className="text-2xl">{playlist.icon}</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{
+                        background: cc.accentBg,
+                        color: cc.accent,
+                        fontSize: '0.65rem',
+                    }}>
+                        {playlist.category === 'bg' ? 'Bhagavad Gītā' :
+                         playlist.category === 'sb' ? 'Śrīmad Bhāgavatam' :
+                         playlist.category === 'vedic-stories' ? 'Vedic Epic' : 'Topical'}
+                    </span>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex justify-center gap-3 mb-10">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium cursor-pointer text-sm"
+                {/* Title */}
+                <h3 className="text-base font-bold mb-1 group-hover:text-[var(--color-primary)] transition-colors" style={{
+                    fontFamily: 'var(--font-heading)',
+                    color: 'var(--color-text)',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.3,
+                }}>
+                    {playlist.title}
+                </h3>
+
+                {/* Subtitle */}
+                <p className="text-xs mb-3" style={{
+                    color: 'var(--color-text-secondary)',
+                    fontSize: '0.75rem',
+                }}>
+                    {playlist.subtitle}
+                </p>
+
+                {/* Description */}
+                <p className="text-xs flex-1 mb-4" style={{
+                    color: 'var(--color-text-muted)',
+                    fontSize: '0.7rem',
+                    lineHeight: 1.6,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                }}>
+                    {playlist.description}
+                </p>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3" style={{
+                    borderTop: '1px solid var(--color-border-light)',
+                }}>
+                    <div className="flex items-center gap-1.5">
+                        <PlayCircle size={12} style={{ color: cc.accent }} />
+                        <span className="text-xs font-semibold" style={{
+                            color: 'var(--color-text)',
+                            fontSize: '0.7rem',
+                        }}>
+                            {playlist.videoCount} Episodes
+                        </span>
+                    </div>
+                    <span className="flex items-center gap-1 text-xs font-semibold group-hover:gap-2 transition-all" style={{
+                        color: cc.accent,
+                        fontSize: '0.7rem',
+                    }}>
+                        Watch <ChevronRight size={12} />
+                    </span>
+                </div>
+            </div>
+        </Link>
+    );
+}
+
+export default function MediaPage() {
+    const totalVideos = getMediaTotalVideoCount();
+
+    return (
+        <div className="min-h-screen" style={{ background: 'var(--color-bg-warm)' }}>
+            {/* Hero Section */}
+            <section className="relative overflow-hidden py-16 md:py-24" style={{
+                background: 'linear-gradient(135deg, rgba(107, 66, 38, 0.95) 0%, rgba(139, 26, 26, 0.95) 40%, rgba(75, 10, 10, 0.98) 100%)',
+            }}>
+                <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: `radial-gradient(circle at 20% 50%, rgba(212, 168, 83, 0.3), transparent 50%),
+                                      radial-gradient(circle at 80% 20%, rgba(212, 168, 83, 0.2), transparent 40%)`,
+                }} />
+
+                <div className="relative max-w-[1200px] mx-auto px-8 text-center">
+                    <p className="text-sm mb-3 tracking-[0.3em] uppercase" style={{
+                        color: 'rgba(212, 168, 83, 0.7)',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '0.7rem',
+                    }}>
+                        श्रवणं कीर्तनं विष्णोः • Hearing & Chanting about Viṣṇu
+                    </p>
+
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{
+                        fontFamily: 'var(--font-heading)',
+                        color: '#F5EDE0',
+                        lineHeight: 1.2,
+                    }}>
+                        Media — Video Library
+                    </h1>
+
+                    <p className="text-lg max-w-2xl mx-auto mb-6" style={{
+                        color: 'rgba(245, 237, 224, 0.8)',
+                        fontSize: '1rem',
+                        lineHeight: 1.7,
+                    }}>
+                        Bhagavad-gītā, Śrīmad-Bhāgavatam, Vedic epics & topical series
+                        by <strong style={{ color: 'var(--color-secondary)' }}>{MEDIA_INSTRUCTOR.name}</strong>
+                    </p>
+
+                    <div className="w-24 h-px mx-auto mb-8" style={{
+                        background: 'linear-gradient(90deg, transparent, var(--color-secondary), transparent)',
+                    }} />
+
+                    {/* Stats */}
+                    <div className="flex items-center justify-center gap-8 md:gap-12 flex-wrap">
+                        <div className="text-center">
+                            <p className="text-2xl font-bold" style={{ color: 'var(--color-secondary)', fontFamily: 'var(--font-heading)' }}>
+                                {ALL_MEDIA_PLAYLISTS.length}
+                            </p>
+                            <p className="text-xs" style={{ color: 'rgba(245, 237, 224, 0.6)', fontSize: '0.7rem' }}>Series</p>
+                        </div>
+                        <div className="w-px h-8" style={{ background: 'rgba(212, 168, 83, 0.3)' }} />
+                        <div className="text-center">
+                            <p className="text-2xl font-bold" style={{ color: 'var(--color-secondary)', fontFamily: 'var(--font-heading)' }}>
+                                {totalVideos}+
+                            </p>
+                            <p className="text-xs" style={{ color: 'rgba(245, 237, 224, 0.6)', fontSize: '0.7rem' }}>Episodes</p>
+                        </div>
+                        <div className="w-px h-8" style={{ background: 'rgba(212, 168, 83, 0.3)' }} />
+                        <div className="text-center">
+                            <p className="text-2xl font-bold" style={{ color: 'var(--color-secondary)', fontFamily: 'var(--font-heading)' }}>
+                                Free
+                            </p>
+                            <p className="text-xs" style={{ color: 'rgba(245, 237, 224, 0.6)', fontSize: '0.7rem' }}>on YouTube</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Category Nav Cards */}
+            <section className="max-w-[1200px] mx-auto px-8 -mt-10 mb-16 relative z-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    {MEDIA_GROUPS.map((group, i) => (
+                        <a
+                            key={group.id}
+                            href={`#${group.id}`}
+                            className="card-elevated p-5 text-center cursor-pointer group"
                             style={{
-                                background: activeTab === tab.id
-                                    ? 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))'
-                                    : 'var(--color-surface)',
-                                color: activeTab === tab.id ? '#F5EDE0' : 'var(--color-text-secondary)',
-                                border: activeTab === tab.id ? 'none' : '1px solid var(--color-border)',
-                                boxShadow: activeTab === tab.id ? 'var(--shadow-md)' : 'none',
-                                transition: 'all var(--transition-base)',
+                                animation: `fadeInUp 0.5s ease-out ${i * 100}ms forwards`,
+                                opacity: 0,
                             }}
                         >
-                            <tab.icon size={18} />
-                            {tab.label}
-                        </button>
+                            <span className="text-2xl mb-2 inline-block group-hover:scale-110 transition-transform">{group.icon}</span>
+                            <h2 className="text-sm font-bold mb-1" style={{
+                                fontFamily: 'var(--font-heading)',
+                                color: 'var(--color-primary)',
+                                fontSize: '1rem',
+                            }}>
+                                {group.title}
+                            </h2>
+                            <p className="text-xs" style={{
+                                color: 'var(--color-text-muted)',
+                                fontSize: '0.65rem',
+                            }}>
+                                {group.playlists.length} {group.playlists.length === 1 ? 'Series' : 'Series'} • {group.playlists.reduce((s, p) => s + p.videoCount, 0)} episodes
+                            </p>
+                        </a>
                     ))}
                 </div>
+            </section>
 
-                {/* Videos Tab */}
-                {activeTab === 'videos' && (
-                    <div>
-                        {/* Playlist Filter */}
-                        <div className="mb-8 flex items-center gap-3 flex-wrap">
-                            <div className="flex items-center gap-2" style={{ color: 'var(--color-text-secondary)' }}>
-                                <Filter size={18} />
-                                <span className="font-medium text-sm">Filter:</span>
-                            </div>
-                            {playlists.map((playlist) => (
-                                <button
-                                    key={playlist}
-                                    onClick={() => setSelectedPlaylist(playlist)}
-                                    className="px-4 py-2 rounded-full text-sm font-medium cursor-pointer"
-                                    style={{
-                                        background: selectedPlaylist === playlist
-                                            ? 'var(--color-primary)'
-                                            : 'transparent',
-                                        color: selectedPlaylist === playlist
-                                            ? '#F5EDE0'
-                                            : 'var(--color-text-secondary)',
-                                        border: selectedPlaylist === playlist
-                                            ? 'none'
-                                            : '1px solid var(--color-border)',
-                                        transition: 'all var(--transition-fast)',
-                                    }}
-                                >
-                                    {playlist}
-                                    {playlist !== 'All' && (
-                                        <span className="ml-1 opacity-70">
-                                            ({allVideos.filter(v => v.playlist === playlist).length})
-                                        </span>
-                                    )}
-                                </button>
-                            ))}
+            {/* Each Category Section */}
+            {MEDIA_GROUPS.map((group, gi) => (
+                <section key={group.id} id={group.id} className="max-w-[1200px] mx-auto px-8 mb-16">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{
+                            background: group.category === 'bg'
+                                ? 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))'
+                                : group.category === 'sb'
+                                    ? 'linear-gradient(135deg, var(--color-secondary-dark), var(--color-secondary))'
+                                    : group.category === 'vedic-stories'
+                                        ? 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))'
+                                        : 'linear-gradient(135deg, #5c7a1f, #7ca82f)',
+                        }}>
+                            <span className="text-lg">{group.icon}</span>
                         </div>
-
-                        {/* Video Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                            {filteredVideos.map((video) => (
-                                <Link
-                                    key={video.id}
-                                    href={video.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="rounded-xl overflow-hidden group"
-                                    style={{
-                                        background: 'var(--color-surface)',
-                                        border: '1px solid var(--color-border-light)',
-                                        boxShadow: 'var(--shadow-sm)',
-                                        transition: 'all var(--transition-base)',
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                                        e.currentTarget.style.transform = 'translateY(-2px)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                    }}
-                                >
-                                    <div className="relative aspect-video">
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={video.thumbnail}
-                                            alt={video.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        <div
-                                            className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
-                                            style={{
-                                                background: 'rgba(45, 24, 16, 0.5)',
-                                                transition: 'opacity var(--transition-base)',
-                                            }}
-                                        >
-                                            <Play size={48} style={{ color: '#F5EDE0' }} fill="#F5EDE0" />
-                                        </div>
-                                    </div>
-                                    <div className="p-4">
-                                        <h3
-                                            className="font-medium text-sm line-clamp-2 min-h-[40px]"
-                                            style={{
-                                                color: 'var(--color-text)',
-                                                fontFamily: 'var(--font-heading)',
-                                            }}
-                                        >
-                                            {video.title}
-                                        </h3>
-                                        <div className="flex items-center justify-between mt-2">
-                                            <span
-                                                className="text-xs font-medium"
-                                                style={{ color: 'var(--color-primary)' }}
-                                            >
-                                                {video.playlist}
-                                            </span>
-                                            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                                                {video.speaker}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
+                        <div>
+                            <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>{group.title}</h2>
+                            <p className="text-xs" style={{
+                                color: 'var(--color-text-muted)',
+                                fontSize: '0.7rem',
+                            }}>
+                                {group.titleSanskrit} — {group.description}
+                            </p>
                         </div>
-
-                        {filteredVideos.length === 0 && (
-                            <div className="text-center py-12" style={{ color: 'var(--color-text-muted)' }}>
-                                No videos found for this playlist.
-                            </div>
-                        )}
                     </div>
-                )}
-
-                {/* Photos Tab */}
-                {activeTab === 'photos' && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-                        {photos.map((photo) => (
-                            <div
-                                key={photo.id}
-                                className="rounded-xl overflow-hidden cursor-pointer group"
-                                style={{
-                                    background: 'var(--color-surface)',
-                                    border: '1px solid var(--color-border-light)',
-                                    boxShadow: 'var(--shadow-sm)',
-                                    transition: 'all var(--transition-base)',
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                }}
-                            >
-                                <div className="relative aspect-square overflow-hidden">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={photo.src}
-                                        alt={photo.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-                                <div className="p-3">
-                                    <p
-                                        className="text-sm text-center truncate"
-                                        style={{ color: 'var(--color-text-secondary)', fontFamily: 'var(--font-heading)' }}
-                                    >
-                                        {photo.title}
-                                    </p>
-                                </div>
-                            </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {group.playlists.map((playlist, i) => (
+                            <PlaylistCard key={playlist.slug} playlist={playlist} index={i + gi * 4} />
                         ))}
                     </div>
-                )}
+                </section>
+            ))}
 
-                {/* Flipbooks Tab */}
-                {activeTab === 'flipbooks' && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5">
-                        {flipbooks.map((book) => (
-                            <div
-                                key={book.id}
-                                className="rounded-xl overflow-hidden cursor-pointer group"
-                                style={{
-                                    background: 'var(--color-surface)',
-                                    border: '1px solid var(--color-border-light)',
-                                    boxShadow: 'var(--shadow-sm)',
-                                    transition: 'all var(--transition-base)',
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                }}
-                            >
-                                <div className="relative aspect-[2/3] overflow-hidden">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={book.cover}
-                                        alt={book.title}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <div
-                                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
-                                        style={{
-                                            background: 'rgba(45, 24, 16, 0.5)',
-                                            transition: 'opacity var(--transition-base)',
-                                        }}
-                                    >
-                                        <BookOpen size={32} style={{ color: '#F5EDE0' }} />
-                                    </div>
-                                </div>
-                                <div className="p-3">
-                                    <p
-                                        className="text-sm font-medium text-center truncate"
-                                        style={{ color: 'var(--color-text)', fontFamily: 'var(--font-heading)' }}
-                                    >
-                                        {book.title}
-                                    </p>
-                                    <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
-                                        {book.pages} pages
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            {/* Instructor Section */}
+            <section className="py-16" style={{
+                background: 'linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-warm) 100%)',
+                borderTop: '1px solid var(--color-border)',
+            }}>
+                <div className="max-w-[800px] mx-auto px-8 text-center">
+                    <p className="text-xs tracking-[0.2em] uppercase mb-4" style={{
+                        color: 'var(--color-secondary-dark)',
+                        fontSize: '0.65rem',
+                    }}>
+                        Speaker
+                    </p>
+                    <h2 className="text-2xl font-bold mb-4" style={{
+                        fontFamily: 'var(--font-heading)',
+                        color: 'var(--color-primary)',
+                    }}>
+                        {MEDIA_INSTRUCTOR.name}
+                    </h2>
+                    <p className="text-sm mb-6" style={{
+                        color: 'var(--color-text-secondary)',
+                        fontSize: '0.85rem',
+                        lineHeight: 1.7,
+                    }}>
+                        {MEDIA_INSTRUCTOR.bio}
+                    </p>
+                    <a
+                        href={MEDIA_INSTRUCTOR.channelUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary inline-flex items-center gap-2"
+                        style={{ fontSize: '0.8rem' }}
+                    >
+                        <ExternalLink size={14} />
+                        Visit HKM Pune Channel
+                    </a>
+                </div>
+            </section>
         </div>
     );
 }
