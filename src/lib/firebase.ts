@@ -1,6 +1,7 @@
 import type { FirebaseApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import type { GoogleAuthProvider as GoogleAuthProviderType } from 'firebase/auth';
+import type { Firestore } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,6 +16,7 @@ const firebaseConfig = {
 let _app: FirebaseApp | undefined;
 let _auth: Auth | undefined;
 let _googleProvider: GoogleAuthProviderType | undefined;
+let _db: Firestore | undefined;
 
 /**
  * All Firebase modules are loaded via dynamic import() so the SDK
@@ -50,4 +52,16 @@ export async function getGoogleProvider(): Promise<GoogleAuthProviderType | unde
     const { GoogleAuthProvider } = await import('firebase/auth');
     _googleProvider = new GoogleAuthProvider();
     return _googleProvider;
+}
+
+export async function getDbInstance(): Promise<Firestore | undefined> {
+    if (typeof window === 'undefined') return undefined;
+    if (_db) return _db;
+
+    const app = await getFirebaseApp();
+    if (!app) return undefined;
+
+    const { getFirestore } = await import('firebase/firestore');
+    _db = getFirestore(app);
+    return _db;
 }

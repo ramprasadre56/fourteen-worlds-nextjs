@@ -21,29 +21,25 @@ export default function SBCoursesPage() {
                     backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(212, 168, 83, 0.3), transparent 50%)',
                 }} />
                 <div className="relative max-w-[1200px] mx-auto px-8">
-                    <Link href="/courses" className="inline-flex items-center gap-1 text-xs mb-6 cursor-pointer" style={{
-                        color: 'rgba(245, 237, 224, 0.6)',
-                        fontSize: '0.75rem',
-                    }}>
+                    <Link href="/courses" className="inline-flex items-center gap-1 text-sm mb-6 cursor-pointer" style={{ color: 'rgba(245, 237, 224, 0.6)' }}>
                         <ArrowLeft size={14} /> Back to All Courses
                     </Link>
                     <div className="flex items-center gap-4 mb-4">
-                        <span className="text-4xl">📖</span>
+                        <span className="text-4xl md:text-5xl">📖</span>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold" style={{
+                            <h1 className="text-3xl md:text-5xl font-bold" style={{
                                 fontFamily: 'var(--font-heading)',
                                 color: '#F5EDE0',
                             }}>
                                 Śrīmad Bhāgavatam
                             </h1>
-                            <p className="text-sm" style={{ color: 'rgba(245, 237, 224, 0.6)', fontSize: '0.8rem' }}>
+                            <p className="text-sm md:text-base" style={{ color: 'rgba(245, 237, 224, 0.6)' }}>
                                 Bhakti Vaibhava & Bhagavata Sevā Level • 12 Cantos • Canto-wise Study
                             </p>
                         </div>
                     </div>
-                    <p className="text-sm max-w-2xl" style={{
+                    <p className="text-base max-w-2xl" style={{
                         color: 'rgba(245, 237, 224, 0.7)',
-                        fontSize: '0.85rem',
                         lineHeight: 1.7,
                     }}>
                         The ripened fruit of the Vedic tree of knowledge — Śrīmad-Bhāgavatam, the spotless Purāṇa.
@@ -68,35 +64,31 @@ export default function SBCoursesPage() {
                                     borderBottom: '1px solid var(--color-border-light)',
                                 }}>
                                     <div className="flex items-start gap-4 flex-1">
-                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{
+                                        <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0" style={{
                                             background: 'linear-gradient(135deg, var(--color-secondary-dark), var(--color-secondary))',
                                         }}>
-                                            <span className="text-xl font-bold" style={{
+                                            <span className="text-2xl font-bold" style={{
                                                 color: '#ffffff',
                                                 fontFamily: 'var(--font-heading)',
-                                                fontSize: '1.1rem',
                                             }}>
                                                 {canto.number}
                                             </span>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h2 className="text-lg font-bold mb-1" style={{
+                                            <h2 className="text-xl font-bold mb-1" style={{
                                                 fontFamily: 'var(--font-heading)',
                                                 color: 'var(--color-primary)',
-                                                fontSize: '1.2rem',
                                             }}>
                                                 Canto {canto.number}: {canto.title}
                                             </h2>
-                                            <p className="text-xs mb-2" style={{
+                                            <p className="text-sm font-semibold mb-2" style={{
                                                 color: 'var(--color-secondary-dark)',
                                                 fontFamily: 'var(--font-heading)',
-                                                fontSize: '0.75rem',
                                             }}>
                                                 {canto.titleSanskrit} • {canto.chapters} chapters
                                             </p>
-                                            <p className="text-xs" style={{
+                                            <p className="text-sm" style={{
                                                 color: 'var(--color-text-muted)',
-                                                fontSize: '0.7rem',
                                                 lineHeight: 1.6,
                                             }}>
                                                 {canto.summary}
@@ -134,35 +126,27 @@ export default function SBCoursesPage() {
                                                     <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{
                                                         background: 'rgba(212, 168, 83, 0.15)',
                                                         color: 'var(--color-secondary-dark)',
-                                                        fontSize: '0.6rem',
                                                     }}>
                                                         {course.level}
                                                     </span>
                                                 </div>
-                                                <h3 className="text-sm font-bold mb-1" style={{
+                                                <h3 className="text-base font-bold mb-1" style={{
                                                     fontFamily: 'var(--font-heading)',
                                                     color: 'var(--color-text)',
-                                                    fontSize: '0.9rem',
                                                 }}>
                                                     {course.title}
                                                 </h3>
-                                                <p className="text-xs mb-3 flex-1" style={{
-                                                    color: 'var(--color-text-muted)',
-                                                    fontSize: '0.65rem',
-                                                }}>
+                                                <p className="text-sm mb-3 flex-1" style={{ color: 'var(--color-text-muted)' }}>
                                                     {course.subtitle}
                                                 </p>
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-1">
-                                                        <PlayCircle size={12} style={{ color: 'var(--color-primary)' }} />
-                                                        <span className="text-xs font-semibold" style={{
-                                                            color: 'var(--color-text)',
-                                                            fontSize: '0.7rem',
-                                                        }}>
+                                                        <PlayCircle size={14} style={{ color: 'var(--color-primary)' }} />
+                                                        <span className="text-xs font-semibold" style={{ color: 'var(--color-text)' }}>
                                                             {course.videoCount} Lessons
                                                         </span>
                                                     </div>
-                                                    <ChevronRight size={14} style={{ color: 'var(--color-primary)' }} className="group-hover:translate-x-1 transition-transform" />
+                                                    <ChevronRight size={16} style={{ color: 'var(--color-primary)' }} className="group-hover:translate-x-1 transition-transform" />
                                                 </div>
                                             </Link>
                                         ))}
@@ -178,7 +162,7 @@ export default function SBCoursesPage() {
                     background: 'rgba(255, 255, 255, 0.7)',
                     border: '1px solid var(--color-border-light)',
                 }}>
-                    <h2 className="section-heading mb-6" style={{ fontSize: '1.4rem' }}>
+                    <h2 className="text-2xl font-bold section-heading mb-6" style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)' }}>
                         All 12 Cantos of Śrīmad Bhāgavatam
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -189,28 +173,30 @@ export default function SBCoursesPage() {
                                     background: hasCourse ? 'rgba(212, 168, 83, 0.08)' : 'var(--color-bg-warm)',
                                     border: hasCourse ? '1px solid rgba(212, 168, 83, 0.2)' : '1px solid transparent',
                                 }}>
-                                    <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold" style={{
+                                    <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold" style={{
                                         background: hasCourse
                                             ? 'linear-gradient(135deg, var(--color-secondary-dark), var(--color-secondary))'
                                             : 'rgba(138, 121, 104, 0.15)',
                                         color: hasCourse ? '#ffffff' : 'var(--color-text-muted)',
-                                        fontSize: '0.7rem',
                                     }}>
                                         {canto.number}
                                     </span>
                                     <div className="min-w-0">
-                                        <p className="text-xs font-semibold" style={{
+                                        <p className="text-sm font-semibold" style={{
                                             color: hasCourse ? 'var(--color-text)' : 'var(--color-text-muted)',
-                                            fontSize: '0.75rem',
                                         }}>
                                             {canto.title}
                                         </p>
-                                        <p className="text-xs" style={{
-                                            color: 'var(--color-text-muted)',
-                                            fontSize: '0.6rem',
-                                        }}>
-                                            {canto.titleSanskrit} • {canto.chapters} chapters
-                                            {hasCourse && <span style={{ color: 'var(--color-secondary-dark)', fontWeight: 600 }}> • Course Available</span>}
+                                        <p className="text-xs flex flex-wrap gap-1" style={{ color: 'var(--color-text-muted)' }}>
+                                            <span>{canto.titleSanskrit}</span>
+                                            <span>•</span>
+                                            <span>{canto.chapters} chapters</span>
+                                            {hasCourse && (
+                                                <>
+                                                    <span>•</span>
+                                                    <span style={{ color: 'var(--color-secondary-dark)', fontWeight: 600 }}>Course Available</span>
+                                                </>
+                                            )}
                                         </p>
                                     </div>
                                 </div>

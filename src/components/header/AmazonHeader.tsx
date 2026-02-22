@@ -11,6 +11,7 @@ const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Courses', href: '/courses', hasMega: true },
     { label: 'Media', href: '/media' },
+    { label: 'My Learning', href: '/my-learning' },
     { label: 'Library', href: '/library' },
     { label: 'Back to Godhead', href: '/backtogodhead' },
 ];
