@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.vercel
+.env*
+*.md
+dev.db
+samples
+temp_blogs.html
+temple_images.txt

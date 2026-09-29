@@ -1,0 +1,8 @@
+[debug] [2026-09-29T12:35:01.592Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-09-29T12:35:02.067Z] > authorizing via signed-in user (govindashorticulture@ghnursery.in)
+[debug] [2026-09-29T12:35:02.179Z] Checked if tokens are valid: false, expires at: 1786115043629
+[debug] [2026-09-29T12:35:02.183Z] Checked if tokens are valid: false, expires at: 1786115043629
+[debug] [2026-09-29T12:35:02.183Z] > refreshing access token with scopes: []
+[debug] [2026-09-29T12:35:02.338Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-29T12:35:02.338Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T12:35:19.439Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
