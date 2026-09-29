@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "fourteen-worlds-auth"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "fourteenworlds-510113"
+  }
 }

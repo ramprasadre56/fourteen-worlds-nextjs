@@ -18,8 +18,11 @@
     "providers": {
       "googleSignIn": {
         "oAuthBrandDisplayName": "Fourteen Worlds",
-        "supportEmail": "ramprasadre56@gmail.com"
+        "supportEmail": "govindashorticulture@ghnursery.in"
       }
     }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
