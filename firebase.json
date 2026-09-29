@@ -1,4 +1,19 @@
 {
+  "hosting": {
+    "public": "firebase-hosting-public",
+    "ignore": [
+      "**/.*"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "fourteenworlds",
+          "region": "asia-south1"
+        }
+      }
+    ]
+  },
   "auth": {
     "providers": {
       "googleSignIn": {

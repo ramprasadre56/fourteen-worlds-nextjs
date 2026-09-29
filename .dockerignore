@@ -3,6 +3,7 @@ node_modules
 .git
 .vercel
 .env*
+!.env.production
 *.md
 dev.db
 samples
