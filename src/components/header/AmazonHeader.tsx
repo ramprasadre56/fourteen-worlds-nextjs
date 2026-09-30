@@ -7,13 +7,87 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useRef, useEffect } from 'react';
 import { BG_COURSES, getPrimarySBCourses, SUPPLEMENTARY_COURSES } from '@/data/catalog-data';
 
-const navLinks = [
+type NavItem = { label: string; href: string };
+type NavLink = NavItem & { hasMega?: boolean; external?: boolean; children?: NavItem[] };
+
+const IDT = 'https://iskcondesiretree.com';
+
+const navLinks: NavLink[] = [
     { label: 'Home', href: '/' },
     { label: 'Courses', href: '/courses', hasMega: true },
     { label: 'My Learning', href: '/my-learning' },
     { label: 'Library', href: '/library' },
     { label: 'Back to Godhead', href: '/backtogodhead' },
+    { label: 'Audio', href: 'https://audio.iskcondesiretree.com/', external: true },
+    { label: 'Video', href: 'https://www.youtube.com/user/iskcondesiretree', external: true },
+    { label: 'Forum', href: `${IDT}/forum/topics`, external: true },
+    { label: 'Blog', href: `${IDT}/profiles/blogs`, external: true },
+    {
+        label: 'Resources', href: 'https://iskcondesiretree.ning.com/', external: true, children: [
+            { label: 'Android Apps', href: 'https://play.google.com/store/apps/developer?id=www.iskcondesiretree.com' },
+            { label: 'iOS Apps', href: 'https://apps.apple.com/us/developer/iskcon-desire-tree/id1376434153' },
+            { label: 'Join WhatsApp Group', href: 'https://join.iskcondesiretree.com/' },
+            { label: 'Bhakti Courses', href: 'https://bhakticourses.com/' },
+            { label: 'Veg Recipes', href: 'https://food.iskcondesiretree.com/' },
+            { label: 'Free eBooks', href: 'https://ebooks.iskcondesiretree.com/' },
+            { label: 'Wallpapers', href: 'https://wallpapers.iskcondesiretree.com/' },
+            { label: 'Vaishnava Calendar 2026', href: `${IDT}/profiles/blogs/hare-krishna-calendar-2026` },
+            { label: 'Motivational Quotes', href: 'https://quotes.iskcondesiretree.com/' },
+            { label: 'ISKCON Book Distribution', href: 'https://www.iskconbookdistribution.com/' },
+            { label: 'Contact Us', href: `${IDT}/main/index/feedback` },
+            { label: 'Hare Krishna Japa', href: 'http://www.harekrishnajapa.com/' },
+        ],
+    },
+    {
+        label: 'Connect', href: 'https://iskcondesiretree.ning.com/', external: true, children: [
+            { label: 'Holy Dham', href: 'http://www.holydham.com/' },
+            { label: 'YouTube', href: 'https://youtube.com/iskcondesiretree' },
+            { label: 'How I Came to KC', href: 'http://howicame.com/' },
+            { label: 'E-Counseling', href: 'https://iskcondesiretree.ning.com/profiles/blogs/e-counseling' },
+            { label: 'For Kids', href: 'https://kids.iskcondesiretree.com/' },
+            { label: 'BTG Subscription', href: 'https://docs.google.com/forms/d/e/1FAIpQLSd0DLWOYleQ_O5qFdiAr2ZMHus-vXNOF7LX5PmmcA0OFJzh1A/viewform' },
+            { label: 'Hindi ISKCON Desire Tree', href: 'https://hindi.iskcondesiretree.com/' },
+            { label: 'Vedic Quiz', href: 'http://quiz.iskcondesiretree.com/' },
+            { label: 'Gaudiya History', href: 'https://gaudiyahistory.iskcondesiretree.com/' },
+            { label: 'Rupa Manjari Institute', href: 'https://srmi.iskcondesiretree.com/' },
+        ],
+    },
 ];
+
+const externalProps = { target: '_blank', rel: 'noopener noreferrer' } as const;
+
+function NavDropdown({ items }: { items: NavItem[] }) {
+    return (
+        <div
+            className="absolute top-full right-0 mt-1 z-[100] min-w-[240px] py-2 rounded-xl animate-fade-in"
+            style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(253,248,240,0.99) 100%)',
+                border: '1px solid rgba(212, 168, 83, 0.35)',
+                boxShadow: '0 20px 60px rgba(45, 24, 16, 0.18), 0 8px 24px rgba(45, 24, 16, 0.08)',
+            }}
+        >
+            {items.map((item) => (
+                <a
+                    key={item.href}
+                    href={item.href}
+                    {...externalProps}
+                    className="block px-4 py-2 text-sm whitespace-nowrap cursor-pointer"
+                    style={{ color: 'var(--color-text)', transition: 'all var(--transition-base)' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(139, 26, 26, 0.06)';
+                        e.currentTarget.style.color = 'var(--color-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = 'var(--color-text)';
+                    }}
+                >
+                    {item.label}
+                </a>
+            ))}
+        </div>
+    );
+}
 
 function CoursesMegaDropdown({ onClose }: { onClose: () => void }) {
     const primarySBCourses = getPrimarySBCourses();
@@ -362,6 +436,8 @@ export function AmazonHeader() {
     const isAuthenticated = !!user;
     const [mobileOpen, setMobileOpen] = useState(false);
     const [megaOpen, setMegaOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState<string | null>(null);
+    const [mobileSubOpen, setMobileSubOpen] = useState<string | null>(null);
     const megaTimeout = useRef<NodeJS.Timeout | null>(null);
 
     const handleMegaEnter = () => {
@@ -427,17 +503,19 @@ export function AmazonHeader() {
                     </Link>
 
                     {/* Desktop Navigation Links */}
-                    <nav className="hidden lg:flex items-center gap-1 flex-shrink-0">
+                    <nav className="hidden xl:flex items-center gap-0.5 flex-wrap justify-center min-w-0">
                         {navLinks.map((link) => (
                             <div
-                                key={link.href}
+                                key={link.label}
                                 className="relative"
-                                onMouseEnter={link.hasMega ? handleMegaEnter : undefined}
-                                onMouseLeave={link.hasMega ? handleMegaLeave : undefined}
+                                onMouseEnter={link.hasMega ? handleMegaEnter : link.children ? () => setOpenMenu(link.label) : undefined}
+                                onMouseLeave={link.hasMega ? handleMegaLeave : link.children ? () => setOpenMenu(null) : undefined}
                             >
                                 <Link
                                     href={link.href}
-                                    className="relative px-3 py-2 text-sm font-medium rounded-lg whitespace-nowrap cursor-pointer flex items-center gap-1"
+                                    {...(link.external ? externalProps : {})}
+                                    onClick={link.children ? (e) => { e.preventDefault(); setOpenMenu(openMenu === link.label ? null : link.label); } : undefined}
+                                    className="relative px-2.5 py-2 text-sm font-medium rounded-lg whitespace-nowrap cursor-pointer flex items-center gap-1"
                                     style={{
                                         color: 'rgba(245, 237, 224, 0.9)',
                                         transition: 'all var(--transition-base)',
@@ -453,11 +531,12 @@ export function AmazonHeader() {
                                     }}
                                 >
                                     {link.label}
-                                    {link.hasMega && <ChevronDown size={12} style={{
-                                        transform: megaOpen ? 'rotate(180deg)' : 'rotate(0)',
+                                    {(link.hasMega || link.children) && <ChevronDown size={12} style={{
+                                        transform: (link.hasMega ? megaOpen : openMenu === link.label) ? 'rotate(180deg)' : 'rotate(0)',
                                         transition: 'transform var(--transition-base)',
                                     }} />}
                                 </Link>
+                                {link.children && openMenu === link.label && <NavDropdown items={link.children} />}
                             </div>
                         ))}
                     </nav>
@@ -531,7 +610,7 @@ export function AmazonHeader() {
 
                         {/* Mobile Menu Toggle */}
                         <button
-                            className="lg:hidden p-2 rounded-lg cursor-pointer"
+                            className="xl:hidden p-2 rounded-lg cursor-pointer"
                             style={{ color: '#F5EDE0', transition: 'background var(--transition-base)' }}
                             onClick={() => setMobileOpen(!mobileOpen)}
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212, 168, 83, 0.12)'}
@@ -555,7 +634,7 @@ export function AmazonHeader() {
                 {/* Mobile Navigation Drawer */}
                 {mobileOpen && (
                     <nav
-                        className="lg:hidden border-t animate-fade-in"
+                        className="xl:hidden border-t animate-fade-in"
                         style={{
                             borderColor: 'rgba(212, 168, 83, 0.2)',
                             background: 'rgba(107, 16, 16, 0.98)',
@@ -576,10 +655,11 @@ export function AmazonHeader() {
                         <MobileCoursesAccordion onClose={() => setMobileOpen(false)} />
 
                         <div className="flex flex-col px-6 py-2 gap-1">
-                            {navLinks.filter(l => !l.hasMega && l.href !== '/').map((link) => (
+                            {navLinks.filter(l => !l.hasMega && !l.children && l.href !== '/').map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
+                                    {...(link.external ? externalProps : {})}
                                     onClick={() => setMobileOpen(false)}
                                     className="px-4 py-3 rounded-lg text-sm font-medium cursor-pointer"
                                     style={{
@@ -597,6 +677,37 @@ export function AmazonHeader() {
                                 >
                                     {link.label}
                                 </Link>
+                            ))}
+                            {navLinks.filter(l => l.children).map((link) => (
+                                <div key={link.label}>
+                                    <button
+                                        onClick={() => setMobileSubOpen(mobileSubOpen === link.label ? null : link.label)}
+                                        className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm font-medium cursor-pointer"
+                                        style={{ color: 'rgba(245, 237, 224, 0.9)' }}
+                                    >
+                                        {link.label}
+                                        <ChevronDown size={14} style={{
+                                            transform: mobileSubOpen === link.label ? 'rotate(180deg)' : 'rotate(0deg)',
+                                            transition: 'transform var(--transition-base)',
+                                        }} />
+                                    </button>
+                                    {mobileSubOpen === link.label && (
+                                        <div className="px-6 pb-2 animate-fade-in">
+                                            {link.children!.map((item) => (
+                                                <a
+                                                    key={item.href}
+                                                    href={item.href}
+                                                    {...externalProps}
+                                                    onClick={() => setMobileOpen(false)}
+                                                    className="block px-3 py-2 text-xs rounded-lg cursor-pointer"
+                                                    style={{ color: 'rgba(212, 168, 83, 0.85)', fontSize: '0.8rem' }}
+                                                >
+                                                    {item.label}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             ))}
                             {!isAuthenticated && (
                                 <Link
