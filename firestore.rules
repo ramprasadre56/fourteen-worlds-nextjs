@@ -1,8 +1,115 @@
 rules_version = "2";
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validAuthor(d) {
+      return d.authorId == request.auth.uid
+        && d.authorName is string && d.authorName.size() > 0 && d.authorName.size() <= 100
+        && (d.authorPhoto == null || (d.authorPhoto is string && d.authorPhoto.size() <= 2000));
+    }
+
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Forum: anyone can read; signed-in users can post.
+    match /forumTopics/{topicId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['title', 'body', 'category', 'type', 'tags', 'authorId', 'authorName', 'authorPhoto', 'createdAt', 'lastActivityAt', 'replyCount'])
+        && validAuthor(request.resource.data)
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 5 && request.resource.data.title.size() <= 200
+        && request.resource.data.body is string
+        && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 20000
+        && request.resource.data.category in ['Vedic Cosmology', 'Reincarnation', 'Demigod Worship', 'Yoga', 'Bhakti', 'Karma', 'Guru', 'Family Life', 'Wealth', 'ISKCON', 'Our Previous Acharyas', 'Scriptures', 'General']
+        && request.resource.data.type in ['question', 'story']
+        && request.resource.data.tags is list && request.resource.data.tags.size() <= 5
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.lastActivityAt == request.time
+        && request.resource.data.replyCount == 0;
+
+      // Only the reply counter / activity time may change, by exactly one.
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['replyCount', 'lastActivityAt'])
+        && request.resource.data.replyCount >= 0
+        && (request.resource.data.replyCount == resource.data.replyCount + 1
+            || request.resource.data.replyCount == resource.data.replyCount - 1)
+        && (request.resource.data.lastActivityAt == resource.data.lastActivityAt
+            || request.resource.data.lastActivityAt == request.time);
+
+      allow delete: if signedIn()
+        && resource.data.authorId == request.auth.uid
+        && resource.data.replyCount == 0;
+
+      match /replies/{replyId} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['body', 'authorId', 'authorName', 'authorPhoto', 'createdAt'])
+          && validAuthor(request.resource.data)
+          && request.resource.data.body is string
+          && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 10000
+          && request.resource.data.createdAt == request.time
+          && exists(/databases/$(database)/documents/forumTopics/$(topicId));
+
+        allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+    // Stories: anyone can read; signed-in users publish; authors edit/delete their own.
+    function validStory(d) {
+      return d.title is string && d.title.size() >= 5 && d.title.size() <= 200
+        && d.subtitle is string && d.subtitle.size() <= 300
+        && d.body is string && d.body.size() > 0 && d.body.size() <= 100000
+        && d.tags is list && d.tags.size() <= 5
+        && (d.coverImage == null || (d.coverImage is string && d.coverImage.size() <= 2000))
+        && d.readingMinutes is int && d.readingMinutes > 0;
+    }
+
+    match /stories/{storyId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['title', 'subtitle', 'body', 'tags', 'coverImage', 'readingMinutes', 'authorId', 'authorName', 'authorPhoto', 'createdAt', 'updatedAt', 'responseCount'])
+        && validAuthor(request.resource.data)
+        && validStory(request.resource.data)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.responseCount == 0;
+
+      allow update: if signedIn() && (
+          (resource.data.authorId == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'subtitle', 'body', 'tags', 'coverImage', 'readingMinutes', 'updatedAt'])
+            && validStory(request.resource.data)
+            && request.resource.data.updatedAt == request.time)
+          ||
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['responseCount'])
+            && request.resource.data.responseCount >= 0
+            && (request.resource.data.responseCount == resource.data.responseCount + 1
+                || request.resource.data.responseCount == resource.data.responseCount - 1))
+        );
+
+      allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+
+      match /responses/{responseId} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['body', 'authorId', 'authorName', 'authorPhoto', 'createdAt'])
+          && validAuthor(request.resource.data)
+          && request.resource.data.body is string
+          && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 10000
+          && request.resource.data.createdAt == request.time
+          && exists(/databases/$(database)/documents/stories/$(storyId));
+
+        allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+      }
     }
   }
 }

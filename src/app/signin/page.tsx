@@ -14,10 +14,24 @@ export default function SignInPage() {
     const [email, setEmail] = useState('');
     const [magicLinkStatus, setMagicLinkStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
 
+    // Remember where to return after sign-in (?next=/some/path, same-site paths only)
+    useEffect(() => {
+        try {
+            const next = new URLSearchParams(window.location.search).get('next');
+            if (next && next.startsWith('/') && !next.startsWith('//')) localStorage.setItem('signinNext', next);
+        } catch { /* storage unavailable */ }
+    }, []);
+
     // Handle Auth redirect if already signed in
     useEffect(() => {
         if (user) {
-            router.push('/');
+            let dest = '/';
+            try {
+                const next = localStorage.getItem('signinNext');
+                if (next && next.startsWith('/') && !next.startsWith('//')) dest = next;
+                localStorage.removeItem('signinNext');
+            } catch { /* storage unavailable */ }
+            router.push(dest);
         }
     }, [user, router]);
 

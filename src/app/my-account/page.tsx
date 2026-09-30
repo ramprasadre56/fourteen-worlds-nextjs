@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { User, LogOut, Settings, CreditCard, Heart } from 'lucide-react';
+import { User, LogOut, Settings, CreditCard, Heart, BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function MyAccountPage() {
@@ -72,6 +72,17 @@ export default function MyAccountPage() {
 
                 {/* Account Links */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Link
+                        href="/my-learning"
+                        className="bg-white rounded-xl p-6 flex items-center gap-4 hover:shadow-md transition-shadow"
+                    >
+                        <BookOpen size={24} className="text-amber-600" />
+                        <div>
+                            <h2 className="font-semibold text-gray-800">My Learning</h2>
+                            <p className="text-sm text-gray-500">Continue your enrolled courses</p>
+                        </div>
+                    </Link>
+
                     <Link
                         href="/cart"
                         className="bg-white rounded-xl p-6 flex items-center gap-4 hover:shadow-md transition-shadow"

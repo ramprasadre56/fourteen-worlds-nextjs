@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import { AmazonHeader, HeaderSpacer } from "@/components/header/AmazonHeader";
+import { SiteShell } from "@/components/header/SiteShell";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -44,9 +44,7 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-body)" }}
       >
         <Providers>
-          <AmazonHeader />
-          <HeaderSpacer />
-          <main className="min-h-screen">{children}</main>
+          <SiteShell>{children}</SiteShell>
         </Providers>
       </body>
     </html>
