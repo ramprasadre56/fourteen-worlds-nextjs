@@ -1,0 +1,4 @@
+# Upload everything except these (so the untracked .env.production is included in Cloud Run builds)
+.git
+node_modules
+.next
