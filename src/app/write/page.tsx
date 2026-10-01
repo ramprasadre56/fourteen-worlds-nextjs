@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { X, Check } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import RichTextEditor from '@/components/forum/RichTextEditor';
+import { invalidateStoryFeed } from '@/components/stories/feed';
 import { htmlToText, normalizeTag, sanitizeHtml, signInHref } from '@/lib/forum';
 import {
     MAX_STORY_TAGS, STORY_BODY_MAX, STORY_SUBTITLE_MAX, STORY_TITLE_MAX, STORY_TITLE_MIN, STORY_TOPICS,
@@ -112,6 +113,7 @@ export default function WritePage() {
             if (id) await updateStory(id, input);
             else id = await publishStory(user, input);
             if (!editId) { try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ } }
+            invalidateStoryFeed();
             router.push(`/stories/${id}`);
         } catch (err) {
             console.error(err);

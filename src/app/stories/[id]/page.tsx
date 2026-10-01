@@ -9,7 +9,9 @@ import RichTextEditor from '@/components/forum/RichTextEditor';
 import { Avatar } from '@/components/forum/ForumChrome';
 import '@/components/forum/forum.css';
 import { REPLY_BODY_MAX, htmlToText, sanitizeHtml, signInHref, timeAgo } from '@/lib/forum';
-import { Story, StoryResponse, addResponse, deleteResponse, deleteStory, getStory, listResponses, topicLabel } from '@/lib/stories';
+import { Story, StoryResponse, addResponse, deleteResponse, deleteStory, getStory, listResponses } from '@/lib/stories';
+import { topicName } from '@/lib/story-topics';
+import { invalidateStoryFeed } from '@/components/stories/feed';
 
 const serif = { fontFamily: "Georgia, 'Times New Roman', serif" };
 
@@ -110,7 +112,7 @@ export default function StoryPage() {
                     {isOwner && (
                         <span className="ml-auto flex items-center gap-5">
                             <Link href={`/write?id=${story.id}`} className="inline-flex items-center gap-1 hover:text-black"><Pencil size={15} /> Edit</Link>
-                            <ConfirmDelete label="Delete" onConfirm={async () => { await deleteStory(story.id); router.push('/stories'); }} />
+                            <ConfirmDelete label="Delete" onConfirm={async () => { await deleteStory(story.id); invalidateStoryFeed(); router.push('/stories'); }} />
                         </span>
                     )}
                 </div>
@@ -120,8 +122,8 @@ export default function StoryPage() {
                 {story.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-12">
                         {story.tags.map((t) => (
-                            <Link key={t} href={`/stories?topic=${t}`} className="px-4 py-2 rounded-full text-sm hover:bg-[#e8e8e8]" style={{ background: '#f2f2f2', color: '#242424' }}>
-                                {topicLabel(t)}
+                            <Link key={t} href={`/stories/tag/${t}`} className="px-4 py-2 rounded-full text-sm hover:bg-[#e8e8e8]" style={{ background: '#f2f2f2', color: '#242424' }}>
+                                {topicName(t)}
                             </Link>
                         ))}
                     </div>
