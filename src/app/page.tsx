@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { VaishnavCalendar } from '@/components/sections/VaishnavCalendar';
 import { PrabhupadaQuotes } from '@/components/sections/PrabhupadaQuotes';
-import { QuickLinks } from '@/components/sections/QuickLinks';
 import { BlogGrid } from '@/components/sections/BlogGrid';
 
 function HeroBanner() {
@@ -172,10 +171,6 @@ export default function HomePage() {
             {/* Main Content */}
             <div style={{ background: 'var(--color-bg)' }}>
                 <div className="w-full max-w-[1440px] mx-auto px-8 py-12 flex flex-col gap-16">
-                    <section>
-                        <QuickLinks />
-                    </section>
-
                     <section className="w-full">
                         <BlogGrid />
                     </section>
