@@ -71,7 +71,7 @@ export function BlogGrid() {
     const sourceInfo = getSourceLabel();
 
     return (
-        <div className="w-full mt-10">
+        <div className="w-full">
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div>

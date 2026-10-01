@@ -63,7 +63,7 @@ export default function HomePage() {
         <div style={{ background: 'var(--color-bg)' }} className="min-h-screen">
             {/* Main Content */}
             <div style={{ background: 'var(--color-bg)' }}>
-                <div className="w-full max-w-[1440px] mx-auto px-8 py-12 flex flex-col gap-16">
+                <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 pb-12 flex flex-col gap-12">
                     <section className="w-full">
                         <BlogGrid />
                     </section>
