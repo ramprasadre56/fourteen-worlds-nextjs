@@ -3,7 +3,24 @@
 import Link from 'next/link';
 import { Calendar, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useAppState } from '@/contexts/StateContext';
-import { CALENDAR_EVENTS, MONTH_KEYS, CalendarEvent, MonthData } from '@/data/calendar-events';
+import { useEffect, useRef, useState } from 'react';
+import { CalendarEvent, MonthData } from '@/data/calendar-events';
+
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** "YYYY-MM" for the visitor's current month shifted by `offset` months. */
+function monthKey(today: Date, offset: number) {
+    const d = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function labelFor(key: string) {
+    const [y, m] = key.split('-').map(Number);
+    return `${MONTH_NAMES[m - 1]} ${y}`;
+}
+
+// Month data already fetched in this browser session.
+const monthCache = new Map<string, MonthData>();
 
 function EventRow({ event }: { event: CalendarEvent }) {
     return (
@@ -41,7 +58,7 @@ function EventRow({ event }: { event: CalendarEvent }) {
     );
 }
 
-function MonthView({ monthData }: { monthData: MonthData }) {
+function MonthView({ monthData, loading }: { monthData: MonthData; loading: boolean }) {
     return (
         <div className="flex flex-col w-full">
             <p
@@ -52,6 +69,12 @@ function MonthView({ monthData }: { monthData: MonthData }) {
             </p>
             <div className="max-h-[320px] overflow-y-auto w-full pr-1">
                 <div className="flex flex-col w-full">
+                    {loading && monthData.events.length === 0 && (
+                        <p className="py-6 text-sm text-center" style={{ color: 'var(--color-text-muted)' }}>Loading events…</p>
+                    )}
+                    {!loading && monthData.events.length === 0 && (
+                        <p className="py-6 text-sm text-center" style={{ color: 'var(--color-text-muted)' }}>No events found for this month.</p>
+                    )}
                     {monthData.events.map((event, index) => (
                         <EventRow key={`${event.date}-${index}`} event={event} />
                     ))}
@@ -62,19 +85,55 @@ function MonthView({ monthData }: { monthData: MonthData }) {
 }
 
 export function VaishnavCalendar() {
-    const { calendarMonthOffset, prevCalendarMonth, nextCalendarMonth } = useAppState();
+    const { calendarMonthOffset, prevCalendarMonth, nextCalendarMonth, resetCalendarMonth } = useAppState();
 
-    const now = new Date();
-    const currentMonthKey = `${now.toLocaleString('default', { month: 'short' }).toLowerCase()}_${now.getFullYear()}`;
-    
-    let baseIndex = MONTH_KEYS.indexOf(currentMonthKey);
-    if (baseIndex === -1) {
-        baseIndex = MONTH_KEYS.length - 1; // Default to latest month if current is not found
-    }
+    // "Today" is tracked in state so the calendar rolls over to the new month automatically
+    // (checked every minute and whenever the tab becomes visible again).
+    const [today, setToday] = useState(() => new Date());
+    useEffect(() => {
+        const tick = () => setToday((prev) => {
+            const now = new Date();
+            return now.getMonth() !== prev.getMonth() || now.getFullYear() !== prev.getFullYear() ? now : prev;
+        });
+        const id = setInterval(tick, 60_000);
+        document.addEventListener('visibilitychange', tick);
+        return () => { clearInterval(id); document.removeEventListener('visibilitychange', tick); };
+    }, []);
 
-    const currentMonthIndex = baseIndex + calendarMonthOffset;
-    const safeIndex = Math.max(0, Math.min(MONTH_KEYS.length - 1, currentMonthIndex));
-    const currentMonthData = CALENDAR_EVENTS[MONTH_KEYS[safeIndex]];
+    // When the month rolls over, jump back to the (new) current month.
+    const shownMonth = useRef(monthKey(today, 0));
+    useEffect(() => {
+        const current = monthKey(today, 0);
+        if (current !== shownMonth.current) {
+            shownMonth.current = current;
+            resetCalendarMonth();
+        }
+    }, [today, resetCalendarMonth]);
+
+    const key = monthKey(today, calendarMonthOffset);
+    const [data, setData] = useState<Record<string, MonthData>>({});
+
+    useEffect(() => {
+        if (monthCache.has(key)) return;
+        let cancelled = false;
+        fetch(`/api/vaishnava-calendar?month=${key}`)
+            .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+            .then((m: MonthData) => {
+                monthCache.set(key, m);
+                if (!cancelled) setData((d) => ({ ...d, [key]: m }));
+            })
+            .catch(() => {
+                if (!cancelled) setData((d) => ({ ...d, [key]: { label: labelFor(key), events: [] } }));
+            });
+        return () => { cancelled = true; };
+    }, [key]);
+
+    const loaded = data[key] ?? monthCache.get(key);
+    const currentMonthData = loaded ?? { label: labelFor(key), events: [] };
+    const loading = !loaded;
+    // Allow browsing one year back and two years ahead.
+    const canPrev = calendarMonthOffset > -12;
+    const canNext = calendarMonthOffset < 24;
 
     return (
         <div
@@ -112,7 +171,8 @@ export function VaishnavCalendar() {
                     <div className="flex items-center gap-1">
                         <button
                             onClick={prevCalendarMonth}
-                            disabled={currentMonthIndex <= 0}
+                            disabled={!canPrev}
+                            aria-label="Previous month"
                             className="p-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             style={{
                                 color: 'var(--color-primary)',
@@ -127,7 +187,8 @@ export function VaishnavCalendar() {
                         </button>
                         <button
                             onClick={nextCalendarMonth}
-                            disabled={currentMonthIndex >= MONTH_KEYS.length - 1}
+                            disabled={!canNext}
+                            aria-label="Next month"
                             className="p-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             style={{
                                 color: 'var(--color-primary)',
@@ -143,7 +204,7 @@ export function VaishnavCalendar() {
                     </div>
                 </div>
 
-                <MonthView monthData={currentMonthData} />
+                <MonthView monthData={currentMonthData} loading={loading} />
 
                 <Link
                     href="https://harekrishnacalendar.com/vaishnava-calendars/"
